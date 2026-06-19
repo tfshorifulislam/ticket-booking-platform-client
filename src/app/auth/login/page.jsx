@@ -1,6 +1,8 @@
 'use client';
 
+import { signIn } from '@/lib/auth-client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const LoginPage = () => {
@@ -9,6 +11,8 @@ const LoginPage = () => {
         password: '',
     });
 
+    const router = useRouter()
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -16,15 +20,35 @@ const LoginPage = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const { email, password } = formData;
+
+        const { data, error } = await signIn.email({
+            email,
+            password,
+        })
+
+        if (error) {
+            console.error("Signup error:", error);
+            alert(error.message);
+            return;
+        }
+        if (data) {
+            console.log("Signup successful:", data);
+            alert("Signup successful! Please check your email to verify your account.");
+            router.push("/");
+            router.refresh();
+        }
+
         console.log(formData);
+
     };
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
             <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-                
+
                 {/* Header */}
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold text-gray-800">

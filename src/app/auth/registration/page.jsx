@@ -2,9 +2,11 @@
 
 import { signUp } from '@/lib/auth-client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const RegistrationPage = () => {
+    const router = useRouter()
     const [formData, setFormData] = useState({
         name: '',
         email: '',
