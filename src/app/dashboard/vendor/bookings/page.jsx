@@ -1,134 +1,208 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 
-const dummyBookings = [
-  {
-    id: 1,
-    userName: 'John Doe',
-    userEmail: 'john@gmail.com',
-    ticketTitle: 'Dhaka to Chittagong Express',
-    quantity: 2,
-    unitPrice: 500,
-    status: 'pending',
-  },
-  {
-    id: 2,
-    userName: 'Sarah Khan',
-    userEmail: 'sarah@gmail.com',
-    ticketTitle: 'Sylhet Night Coach',
-    quantity: 1,
-    unitPrice: 800,
-    status: 'pending',
-  },
-];
-
 const BookingsPageVendor = () => {
-  const handleAccept = (id) => {
-    console.log('Accepted:', id);
-    // TODO: API call → update status = accepted
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  // ================= FETCH =================
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        setLoading(true);
+
+        const res = await fetch('http://localhost:5000/api/vendor-bookings');
+
+        if (!res.ok) {
+          throw new Error('Failed to fetch bookings');
+        }
+
+        const data = await res.json();
+
+        console.log('BOOKINGS FROM API:', data); // 🔥 DEBUG
+
+        setBookings(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load bookings');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, []);
+
+  // ================= ACCEPT =================
+  const handleAccept = async (id) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/vendor-booking/${id}`,
+        {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'accepted' }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.modifiedCount > 0) {
+        setBookings((prev) =>
+          prev.map((b) =>
+            b._id === id ? { ...b, status: 'accepted' } : b
+          )
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleReject = (id) => {
-    console.log('Rejected:', id);
-    // TODO: API call → update status = rejected
+  // ================= REJECT =================
+  const handleReject = async (id) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/vendor-booking/${id}`,
+        {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'rejected' }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.modifiedCount > 0) {
+        setBookings((prev) =>
+          prev.map((b) =>
+            b._id === id ? { ...b, status: 'rejected' } : b
+          )
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
+
+  // ================= LOADING =================
+  if (loading) {
+    return (
+      <div className="text-center py-10 text-gray-500">
+        Loading bookings...
+      </div>
+    );
+  }
+
+  // ================= ERROR =================
+  if (error) {
+    return (
+      <div className="text-center py-10 text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-7xl mx-auto px-4 py-10">
 
-      {/* Header */}
-      <h1 className="text-2xl font-semibold text-gray-900 mb-6">
+      <h1 className="text-2xl font-semibold mb-6">
         Booking Requests
       </h1>
 
-      {/* Table */}
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto">
+      {/* EMPTY STATE */}
+      {bookings.length === 0 ? (
+        <div className="text-center py-10 text-gray-500">
+          No booking requests found
+        </div>
+      ) : (
 
-        <table className="min-w-full text-sm">
+        <div className="bg-white border rounded-2xl overflow-x-auto">
 
-          {/* Head */}
-          <thead className="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider">
-            <tr>
-              <th className="text-left px-6 py-4">User</th>
-              <th className="text-left px-6 py-4">Ticket</th>
-              <th className="text-left px-6 py-4">Quantity</th>
-              <th className="text-left px-6 py-4">Total Price</th>
-              <th className="text-left px-6 py-4">Actions</th>
-            </tr>
-          </thead>
+          <table className="min-w-full text-sm">
 
-          {/* Body */}
-          <tbody className="divide-y divide-gray-100">
+            <thead className="bg-gray-50 text-xs uppercase">
+              <tr>
+                <th className="px-6 py-4 text-left">User</th>
+                <th className="px-6 py-4 text-left">Ticket</th>
+                <th className="px-6 py-4 text-left">Qty</th>
+                <th className="px-6 py-4 text-left">Total</th>
+                <th className="px-6 py-4 text-left">Actions</th>
+              </tr>
+            </thead>
 
-            {dummyBookings.map((booking) => {
-              const totalPrice = booking.quantity * booking.unitPrice;
+            <tbody className="divide-y">
 
-              return (
-                <tr key={booking.id} className="hover:bg-gray-50 transition">
+              {bookings.map((b) => {
+                const total = (b.quantity || 0) * (b.unitPrice || 0);
 
-                  {/* User */}
-                  <td className="px-6 py-4">
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {booking.userName}
+                return (
+                  <tr key={b._id} className="hover:bg-gray-50">
+
+                    {/* USER */}
+                    <td className="px-6 py-4">
+                      <p className="font-medium">
+                        {b.userName || 'Unknown'}
                       </p>
                       <p className="text-xs text-gray-500">
-                        {booking.userEmail}
+                        {b.userEmail || 'No email'}
                       </p>
-                    </div>
-                  </td>
+                    </td>
 
-                  {/* Ticket */}
-                  <td className="px-6 py-4 text-gray-700">
-                    {booking.ticketTitle}
-                  </td>
+                    {/* TICKET */}
+                    <td className="px-6 py-4">
+                      {b.ticketTitle || 'No title'}
+                    </td>
 
-                  {/* Qty */}
-                  <td className="px-6 py-4 text-gray-700">
-                    {booking.quantity}
-                  </td>
+                    {/* QTY */}
+                    <td className="px-6 py-4">
+                      {b.quantity || 0}
+                    </td>
 
-                  {/* Price */}
-                  <td className="px-6 py-4 font-semibold text-emerald-600">
-                    ৳ {totalPrice}
-                  </td>
+                    {/* TOTAL */}
+                    <td className="px-6 py-4 font-semibold text-green-600">
+                      ৳ {total}
+                    </td>
 
-                  {/* Actions */}
-                  <td className="px-6 py-4">
+                    {/* ACTIONS */}
+                    <td className="px-6 py-4">
 
-                    <div className="flex gap-2">
+                      <div className="flex gap-2">
 
-                      <button
-                        onClick={() => handleAccept(booking.id)}
-                        className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
-                      >
-                        <FaCheck />
-                        Accept
-                      </button>
+                        <button
+                          onClick={() => handleAccept(b._id)}
+                          disabled={b.status !== 'pending'}
+                          className="px-3 py-1 text-xs bg-green-600 text-white rounded disabled:opacity-40"
+                        >
+                          <FaCheck /> Accept
+                        </button>
 
-                      <button
-                        onClick={() => handleReject(booking.id)}
-                        className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
-                      >
-                        <FaTimes />
-                        Reject
-                      </button>
+                        <button
+                          onClick={() => handleReject(b._id)}
+                          disabled={b.status !== 'pending'}
+                          className="px-3 py-1 text-xs bg-red-600 text-white rounded disabled:opacity-40"
+                        >
+                          <FaTimes /> Reject
+                        </button>
 
-                    </div>
+                      </div>
 
-                  </td>
+                    </td>
 
-                </tr>
-              );
-            })}
+                  </tr>
+                );
+              })}
 
-          </tbody>
+            </tbody>
 
-        </table>
+          </table>
 
-      </div>
+        </div>
+      )}
+
     </div>
   );
 };
