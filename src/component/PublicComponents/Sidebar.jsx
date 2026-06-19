@@ -64,10 +64,10 @@ const Sidebar = () => {
                 `}
                 title={item.name}
               >
-                {/* আইকন সবসময় দৃশ্যমান */}
+               
                 <span className="text-xl flex-shrink-0">{item.icon}</span>
 
-                {/* নাম শুধুমাত্র sm স্ক্রিন এবং তার উপরে দেখাবে */}
+               
                 <span className="hidden sm:block text-sm font-medium whitespace-nowrap">
                   {item.name}
                 </span>
