@@ -93,10 +93,10 @@ const AllTickets = () => {
             {/* HEADER */}
             <div className="text-center mb-8">
                 <h1 className="text-3xl font-bold text-gray-800">
-                    All Approved Tickets
+                    All Tickets
                 </h1>
                 <p className="text-gray-500">
-                    Browse admin-approved tickets only
+                    Browse tickets
                 </p>
             </div>
 
