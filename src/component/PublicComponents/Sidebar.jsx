@@ -1,17 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   FaUserCircle,
   FaTicketAlt,
   FaHistory,
-  FaBars,
-  FaTimes,
 } from 'react-icons/fa';
 
 const Sidebar = () => {
-  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   const menuItems = [
     {
@@ -33,53 +32,53 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile Top Bar */}
-      <div className="md:hidden flex items-center justify-between p-4 bg-white shadow">
-        <h2 className="font-bold text-lg text-gray-800">Dashboard</h2>
-
-        <button
-          onClick={() => setOpen(!open)}
-          className="text-2xl text-gray-700"
-        >
-          {open ? <FaTimes /> : <FaBars />}
-        </button>
-      </div>
-
-      {/* Sidebar */}
-      <div
-        className={`fixed md:static top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 z-50
-        ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+      {/* Fixed Full Height Sidebar */}
+      <div 
+        className="fixed top-0 left-0 h-screen bg-white shadow-md border-r z-50 transition-all duration-300 flex flex-col
+                   w-16 sm:w-64"
       >
-        {/* Header */}
-        <div className="p-5 border-b">
-          <h1 className="text-xl font-bold text-green-600">
-            Ticket System
+        {/* Sidebar Header */}
+        <div className="h-16 flex items-center px-4 border-b justify-center sm:justify-start sm:px-6">
+          <h1 className="text-xl font-bold text-green-600 truncate">
+            {/* ছোট স্ক্রিনে শুধু ইমোজি বা লোগো আইকন, বড় স্ক্রিনে পুরো টেক্সট */}
+            <span className="block sm:hidden text-2xl">🎫</span>
+            <span className="hidden sm:block">Ticket System</span>
           </h1>
         </div>
 
-        {/* Menu */}
-        <nav className="p-4 space-y-2">
-          {menuItems.map((item, i) => (
-            <Link
-              key={i}
-              href={item.href}
-              className="flex items-center gap-3 p-3 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-600 transition"
-              onClick={() => setOpen(false)}
-            >
-              <span className="text-lg">{item.icon}</span>
-              <span className="text-sm font-medium">{item.name}</span>
-            </Link>
-          ))}
+        {/* Navigation Menu */}
+        <nav className="p-2 sm:p-4 space-y-2 flex-1 overflow-y-auto">
+          {menuItems.map((item, i) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={i}
+                href={item.href}
+                className={`
+                  flex items-center gap-4 p-3 rounded-xl transition-all duration-200
+                  justify-center sm:justify-start
+                  ${isActive 
+                    ? 'bg-green-600 text-white shadow-sm' 
+                    : 'text-gray-600 hover:bg-green-50 hover:text-green-600'
+                  }
+                `}
+                title={item.name}
+              >
+                {/* আইকন সবসময় দৃশ্যমান */}
+                <span className="text-xl flex-shrink-0">{item.icon}</span>
+
+                {/* নাম শুধুমাত্র sm স্ক্রিন এবং তার উপরে দেখাবে */}
+                <span className="hidden sm:block text-sm font-medium whitespace-nowrap">
+                  {item.name}
+                </span>
+              </Link>
+            );
+          })}
         </nav>
       </div>
 
-      {/* Overlay for mobile */}
-      {open && (
-        <div
-          onClick={() => setOpen(false)}
-          className="fixed inset-0 bg-black/40 md:hidden"
-        />
-      )}
+      {/* Spacer Element: সাইডবারটি ফিক্সড হওয়ায় মেইন কনটেন্ট যেন এটার নিচে ঢাকা না পড়ে */}
+      <div className="w-16 sm:w-64 flex-shrink-0" />
     </>
   );
 };
