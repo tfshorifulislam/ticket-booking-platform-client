@@ -1,5 +1,6 @@
 'use client';
 
+import { signOut } from '@/lib/auth-client';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import {
@@ -22,6 +23,10 @@ const PublicNavbar = () => {
             ? [{ name: 'Dashboard', href: '/dashboard' }]
             : []),
     ];
+
+    const handleSignOut = async () => {
+        await signOut()
+    }
 
     return (
         <nav className="sticky top-0 z-50 bg-white border-b shadow-sm">
@@ -92,6 +97,7 @@ const PublicNavbar = () => {
                                         </a>
 
                                         <button
+                                            onClick={handleSignOut}
                                             className="w-full text-left px-4 py-3 hover:bg-red-50 text-red-600"
                                         >
                                             Logout
@@ -107,7 +113,7 @@ const PublicNavbar = () => {
                         onClick={() => setMobileMenu(!mobileMenu)}
                         className="md:hidden text-2xl text-gray-700"
                     >
-                        {mobileMenu ? <RxCross2 />: <RxHamburgerMenu />}
+                        {mobileMenu ? <RxCross2 /> : <RxHamburgerMenu />}
                     </button>
                 </div>
 
@@ -156,7 +162,9 @@ const PublicNavbar = () => {
                                         My Profile
                                     </a>
 
-                                    <button className="text-left text-red-600 font-medium">
+                                    <button
+                                        onClick={handleSignOut}
+                                        className="text-left text-red-600 font-medium">
                                         Logout
                                     </button>
                                 </>
