@@ -37,31 +37,31 @@ const BookingsPageVendor = () => {
   }, []);
 
   // ================= ACCEPT =================
-  const handleAccept = async (id) => {
-    try {
-      const res = await fetch(
-        `http://localhost:5000/api/vendor-booking/${id}`,
-        {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: 'accepted' }),
-        }
+ const handleAccept = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:5000/api/vendor-booking/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'accepted' }),
+    });
+
+    const data = await res.json();
+
+    console.log('PATCH RESPONSE:', data);
+
+    if (data.success || data.modifiedCount || data.acknowledged) {
+      setBookings(prev =>
+        prev.map(b =>
+          (b._id === id || b.id === id)
+            ? { ...b, status: 'accepted' }
+            : b
+        )
       );
-
-      const data = await res.json();
-
-      if (data.modifiedCount > 0) {
-        setBookings((prev) =>
-          prev.map((b) =>
-            b._id === id ? { ...b, status: 'accepted' } : b
-          )
-        );
-      }
-    } catch (err) {
-      console.error(err);
     }
-  };
-
+  } catch (err) {
+    console.error(err);
+  }
+};
   // ================= REJECT =================
   const handleReject = async (id) => {
     try {
