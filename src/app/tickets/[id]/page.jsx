@@ -104,21 +104,29 @@ const TicketDetailsPage = () => {
 
       const res = await fetch('http://localhost:5000/api/book-ticket', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           ticketId: ticket._id,
           quantity: qty,
-          status: 'Pending',
         }),
       });
 
       const data = await res.json();
 
-      if (data.insertedId || data.success) {
+      if (data.success) {
         alert('Booking successful!');
         setIsModalOpen(false);
         setQty(1);
+
+        // optional: refresh ticket
+        setTicket(prev => ({
+          ...prev,
+          quantity: prev.quantity - qty,
+        }));
       }
+
     } catch (err) {
       console.error(err);
     } finally {
