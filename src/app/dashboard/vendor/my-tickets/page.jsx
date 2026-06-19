@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FaEdit,
   FaTrash,
@@ -8,36 +8,7 @@ import {
   FaClock,
   FaTimesCircle,
 } from 'react-icons/fa';
-
-const dummyTickets = [
-  {
-    id: 1,
-    title: 'Dhaka to Chittagong Express',
-    from: 'Dhaka',
-    to: 'Chittagong',
-    price: 500,
-    quantity: 20,
-    status: 'pending',
-  },
-  {
-    id: 2,
-    title: 'Sylhet Night Coach',
-    from: 'Dhaka',
-    to: 'Sylhet',
-    price: 800,
-    quantity: 10,
-    status: 'approved',
-  },
-  {
-    id: 3,
-    title: 'Rajshahi Fast Line',
-    from: 'Dhaka',
-    to: 'Rajshahi',
-    price: 400,
-    quantity: 5,
-    status: 'rejected',
-  },
-];
+import { useSession } from '@/lib/auth-client';
 
 const statusStyle = {
   pending: 'bg-yellow-50 text-yellow-700 border-yellow-100',
@@ -52,6 +23,55 @@ const statusIcon = {
 };
 
 const MyTicketPage = () => {
+  const { data: session } = useSession();
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // 🔥 Fetch vendor tickets from backend
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:5000/api/my-tickets?email=${session?.user?.email}`
+        );
+
+        const data = await res.json();
+        setTickets(data || []);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (session?.user?.email) {
+      fetchTickets();
+    }
+  }, [session?.user?.email]);
+
+  // 🗑️ Delete handler (future API)
+  const handleDelete = async (id) => {
+    const confirm = window.confirm('Are you sure to delete?');
+    if (!confirm) return;
+
+    try {
+      // TODO: backend API call
+      // await fetch(`http://localhost:5000/api/ticket/${id}`, { method: 'DELETE' })
+
+      setTickets((prev) => prev.filter((t) => t._id !== id));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto py-10 px-4">
+        <p className="text-gray-500">Loading tickets...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
@@ -61,85 +81,97 @@ const MyTicketPage = () => {
       </h1>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {tickets.length === 0 ? (
+        <p className="text-gray-500">No tickets found</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        {dummyTickets.map((ticket) => {
-          const isRejected = ticket.status === 'rejected';
+          {tickets.map((ticket) => {
+            const isRejected = ticket.status === 'rejected';
 
-          return (
-            <div
-              key={ticket.id}
-              className="border border-gray-100 rounded-2xl bg-white shadow-sm hover:shadow-md transition p-5 flex flex-col gap-4"
-            >
+            return (
+              <div
+                key={ticket._id}
+                className="border border-gray-100 rounded-2xl bg-white shadow-sm hover:shadow-md transition p-5 flex flex-col gap-4"
+              >
 
-              {/* Title */}
-              <div>
-                <h2 className="font-semibold text-gray-900">
-                  {ticket.title}
-                </h2>
+                {/* Title */}
+                <div>
+                  <h2 className="font-semibold text-gray-900">
+                    {ticket.title}
+                  </h2>
 
-                <p className="text-sm text-gray-500 mt-1">
-                  {ticket.from} → {ticket.to}
-                </p>
-              </div>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {ticket.from} → {ticket.to}
+                  </p>
+                </div>
 
-              {/* Price + Qty */}
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-500">
-                  Qty: <span className="text-gray-900 font-medium">{ticket.quantity}</span>
-                </span>
+                {/* Price + Qty */}
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500">
+                    Qty:{' '}
+                    <span className="text-gray-900 font-medium">
+                      {ticket.quantity}
+                    </span>
+                  </span>
 
-                <span className="text-gray-900 font-semibold">
-                  ৳ {ticket.price}
-                </span>
-              </div>
+                  <span className="text-gray-900 font-semibold">
+                    ৳ {ticket.price}
+                  </span>
+                </div>
 
-              {/* Status */}
-              <div className="flex items-center justify-between">
+                {/* Status */}
+                <div className="flex items-center justify-between">
 
-                <span
-                  className={`flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border capitalize ${statusStyle[ticket.status]}`}
-                >
-                  {statusIcon[ticket.status]}
-                  {ticket.status}
-                </span>
-
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-2 mt-auto">
-
-                <button
-                  disabled={isRejected}
-                  className={`flex-1 flex items-center justify-center gap-2 text-sm px-3 py-2 rounded-lg border transition
-                    ${isRejected
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'hover:bg-green-50 text-gray-700 border-gray-200'
+                  <span
+                    className={`flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border capitalize ${
+                      statusStyle[ticket.status]
                     }`}
-                >
-                  <FaEdit />
-                  Update
-                </button>
+                  >
+                    {statusIcon[ticket.status]}
+                    {ticket.status}
+                  </span>
 
-                <button
-                  disabled={isRejected}
-                  className={`flex-1 flex items-center justify-center gap-2 text-sm px-3 py-2 rounded-lg border transition
-                    ${isRejected
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'hover:bg-red-50 text-gray-700 border-gray-200'
-                    }`}
-                >
-                  <FaTrash />
-                  Delete
-                </button>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-2 mt-auto">
+
+                  <button
+                    disabled={isRejected}
+                    className={`flex-1 flex items-center justify-center gap-2 text-sm px-3 py-2 rounded-lg border transition
+                      ${
+                        isRejected
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'hover:bg-green-50 text-gray-700 border-gray-200'
+                      }`}
+                  >
+                    <FaEdit />
+                    Update
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(ticket._id)}
+                    disabled={isRejected}
+                    className={`flex-1 flex items-center justify-center gap-2 text-sm px-3 py-2 rounded-lg border transition
+                      ${
+                        isRejected
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'hover:bg-red-50 text-gray-700 border-gray-200'
+                      }`}
+                  >
+                    <FaTrash />
+                    Delete
+                  </button>
+
+                </div>
 
               </div>
+            );
+          })}
 
-            </div>
-          );
-        })}
-
-      </div>
+        </div>
+      )}
     </div>
   );
 };
