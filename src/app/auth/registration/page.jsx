@@ -1,5 +1,6 @@
 'use client';
 
+import { signUp } from '@/lib/auth-client';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
@@ -17,9 +18,29 @@ const RegistrationPage = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
+        const { name, email, password } = formData;
+
+        const { data, error } = await signUp.email({
+            email,
+            password,
+            name
+            // role: role,
+        })
+
+        if (error) {
+            console.error("Signup error:", error);
+            alert(error.message || "An error occurred during signup. Please try again.");
+            return;
+        }
+        if (data) {
+            console.log("Signup successful:", data);
+            alert("Signup successful! Please check your email to verify your account.");
+            router.push("/");
+            router.refresh();
+        }
+
         console.log(formData);
     };
 
