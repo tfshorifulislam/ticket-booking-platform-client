@@ -24,10 +24,18 @@ const statusIcon = {
 
 const MyTicketPage = () => {
   const { data: session } = useSession();
+
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // FETCH tickets
+  // 🔥 modal state
+  const [editTicket, setEditTicket] = useState(null);
+  const [formData, setFormData] = useState({
+    price: '',
+    quantity: '',
+  });
+
+  // ================= FETCH =================
   useEffect(() => {
     const fetchTickets = async () => {
       try {
@@ -50,15 +58,16 @@ const MyTicketPage = () => {
     fetchTickets();
   }, [session?.user?.email]);
 
-  // DELETE ticket
+  // ================= DELETE =================
   const handleDelete = async (id) => {
-    const ok = window.confirm('Are you sure you want to delete this ticket?');
+    const ok = window.confirm('Delete this ticket?');
     if (!ok) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/ticket/${id}`, {
-        method: 'DELETE',
-      });
+      const res = await fetch(
+        `http://localhost:5000/api/ticket/${id}`,
+        { method: 'DELETE' }
+      );
 
       const data = await res.json();
 
@@ -70,10 +79,56 @@ const MyTicketPage = () => {
     }
   };
 
-  // UPDATE (future API ready)
-  const handleUpdate = (id) => {
-    console.log('Update ticket:', id);
-    // future: open modal / redirect to edit page
+  // ================= OPEN MODAL =================
+  const handleUpdate = (ticket) => {
+    setEditTicket(ticket);
+    setFormData({
+      price: ticket.price,
+      quantity: ticket.quantity,
+    });
+  };
+
+  // ================= INPUT CHANGE =================
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // ================= SUBMIT UPDATE =================
+  const submitUpdate = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/ticket/${editTicket._id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            price: Number(formData.price),
+            quantity: Number(formData.quantity),
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.modifiedCount > 0) {
+        setTickets((prev) =>
+          prev.map((t) =>
+            t._id === editTicket._id
+              ? { ...t, ...formData }
+              : t
+          )
+        );
+
+        setEditTicket(null);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   if (loading) {
@@ -87,7 +142,7 @@ const MyTicketPage = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-      <h1 className="text-2xl font-semibold text-gray-900 mb-6">
+      <h1 className="text-2xl font-semibold mb-6">
         My Tickets
       </h1>
 
@@ -102,74 +157,52 @@ const MyTicketPage = () => {
             return (
               <div
                 key={ticket._id}
-                className="border border-gray-100 rounded-2xl bg-white shadow-sm hover:shadow-md transition p-5 flex flex-col gap-4"
+                className="border rounded-2xl p-5 shadow-sm flex flex-col gap-4"
               >
 
-                {/* Title */}
+                {/* TITLE */}
                 <div>
-                  <h2 className="font-semibold text-gray-900">
+                  <h2 className="font-semibold">
                     {ticket.title}
                   </h2>
 
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-gray-500">
                     {ticket.from} → {ticket.to}
                   </p>
                 </div>
 
-                {/* Price + Qty */}
+                {/* PRICE */}
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">
-                    Qty:{' '}
-                    <span className="text-gray-900 font-medium">
-                      {ticket.quantity}
-                    </span>
-                  </span>
-
-                  <span className="text-gray-900 font-semibold">
-                    ৳ {ticket.price}
-                  </span>
+                  <span>Qty: {ticket.quantity}</span>
+                  <span className="font-semibold">৳ {ticket.price}</span>
                 </div>
 
-                {/* Status */}
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border capitalize ${
-                      statusStyle[ticket.status]
-                    }`}
-                  >
+                {/* STATUS */}
+                <div>
+                  <span className={`flex items-center gap-1 text-xs px-2 py-1 rounded border ${statusStyle[ticket.status]}`}>
                     {statusIcon[ticket.status]}
                     {ticket.status}
                   </span>
                 </div>
 
-                {/* Actions */}
+                {/* ACTIONS */}
                 <div className="flex gap-2 mt-auto">
 
-                  {/* UPDATE */}
                   <button
-                    onClick={() => handleUpdate(ticket._id)}
+                    onClick={() => handleUpdate(ticket)}
                     disabled={isRejected}
-                    className={`flex-1 flex items-center justify-center gap-2 text-sm px-3 py-2 rounded-lg border transition
-                      ${
-                        isRejected
-                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                          : 'hover:bg-green-50 text-gray-700 border-gray-200'
-                      }`}
+                    className={`flex-1 flex items-center justify-center gap-2 text-sm px-3 py-2 rounded border
+                      ${isRejected ? 'bg-gray-100 text-gray-400' : 'hover:bg-green-50'}`}
                   >
                     <FaEdit />
                     Update
                   </button>
 
-                  {/* DELETE */}
                   <button
                     onClick={() => handleDelete(ticket._id)}
                     disabled={isRejected}
-                    className={`flex-1 flex items-center justify-center gap-2 text-sm px-3 py-2 rounded-lg border transition
-                      ${
-                        isRejected
-                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                          : 'hover:bg-red-50 text-gray-700 border-gray-200'
-                      }`}
+                    className={`flex-1 flex items-center justify-center gap-2 text-sm px-3 py-2 rounded border
+                      ${isRejected ? 'bg-gray-100 text-gray-400' : 'hover:bg-red-50'}`}
                   >
                     <FaTrash />
                     Delete
@@ -182,6 +215,57 @@ const MyTicketPage = () => {
           })}
         </div>
       )}
+
+      {/* ================= MODAL ================= */}
+      {editTicket && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+          <div className="bg-white w-[90%] max-w-md p-6 rounded-2xl">
+
+            <h2 className="text-lg font-semibold mb-4">
+              Update Ticket
+            </h2>
+
+            <input
+              type="number"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              className="w-full border p-2 rounded mb-3"
+              placeholder="Price"
+            />
+
+            <input
+              type="number"
+              name="quantity"
+              value={formData.quantity}
+              onChange={handleChange}
+              className="w-full border p-2 rounded mb-4"
+              placeholder="Quantity"
+            />
+
+            <div className="flex justify-end gap-2">
+
+              <button
+                onClick={() => setEditTicket(null)}
+                className="px-4 py-2 bg-gray-200 rounded"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={submitUpdate}
+                className="px-4 py-2 bg-green-600 text-white rounded"
+              >
+                Save
+              </button>
+
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
