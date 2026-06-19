@@ -32,21 +32,82 @@ const AddTicketPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const payload = {
-      ...form,
-      vendorName: session?.user?.name,
-      vendorEmail: session?.user?.email,
-      status: 'pending',
-    };
+    try {
+      let imageUrl = '';
 
-    console.log('Ticket Payload:', payload);
+      // 🖼️ 1. Upload image to IMGBB first
+      if (form.image) {
+        const imgForm = new FormData();
+        imgForm.append('image', form.image);
 
-    // 🔥 future API call here
-    // fetch('/api/tickets', { method: 'POST', body: JSON.stringify(payload) })
+        const imgRes = await fetch(
+          `https://api.imgbb.com/1/upload?key=YOUR_IMGBB_API_KEY`,
+          {
+            method: 'POST',
+            body: imgForm,
+          }
+        );
+
+        const imgData = await imgRes.json();
+        imageUrl = imgData?.data?.url;
+      }
+
+      // 📦 2. Build payload
+      const payload = {
+        title: form.title,
+        from: form.from,
+        to: form.to,
+        type: form.type,
+        price: Number(form.price),
+        quantity: Number(form.quantity),
+        dateTime: form.dateTime,
+        perks: form.perks,
+        image: imageUrl,
+
+        vendorName: session?.user?.name,
+        vendorEmail: session?.user?.email,
+
+        status: 'pending',
+      };
+
+      // 🔥 3. Send to backend
+      const res = await fetch('http://localhost:5000/api/add-ticket', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (data?.success) {
+        alert('Ticket added successfully!');
+
+        // reset form
+        setForm({
+          title: '',
+          from: '',
+          to: '',
+          type: '',
+          price: '',
+          quantity: '',
+          dateTime: '',
+          perks: [],
+          image: null,
+        });
+      } else {
+        alert('Failed to add ticket');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong');
+    }
   };
+
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
