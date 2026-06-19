@@ -27,41 +27,53 @@ const MyTicketPage = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔥 Fetch vendor tickets from backend
+  // FETCH tickets
   useEffect(() => {
     const fetchTickets = async () => {
       try {
+        const email = session?.user?.email;
+        if (!email) return;
+
         const res = await fetch(
-          `http://localhost:5000/api/my-tickets?email=${session?.user?.email}`
+          `http://localhost:5000/api/my-tickets?email=${email}`
         );
 
         const data = await res.json();
         setTickets(data || []);
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
-    if (session?.user?.email) {
-      fetchTickets();
-    }
+    fetchTickets();
   }, [session?.user?.email]);
 
-  // 🗑️ Delete handler (future API)
+  // DELETE ticket
   const handleDelete = async (id) => {
-    const confirm = window.confirm('Are you sure to delete?');
-    if (!confirm) return;
+    const ok = window.confirm('Are you sure you want to delete this ticket?');
+    if (!ok) return;
 
     try {
-      // TODO: backend API call
-      // await fetch(`http://localhost:5000/api/ticket/${id}`, { method: 'DELETE' })
+      const res = await fetch(`http://localhost:5000/api/ticket/${id}`, {
+        method: 'DELETE',
+      });
 
-      setTickets((prev) => prev.filter((t) => t._id !== id));
-    } catch (error) {
-      console.error(error);
+      const data = await res.json();
+
+      if (data.deletedCount > 0) {
+        setTickets((prev) => prev.filter((t) => t._id !== id));
+      }
+    } catch (err) {
+      console.error(err);
     }
+  };
+
+  // UPDATE (future API ready)
+  const handleUpdate = (id) => {
+    console.log('Update ticket:', id);
+    // future: open modal / redirect to edit page
   };
 
   if (loading) {
@@ -75,12 +87,10 @@ const MyTicketPage = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-      {/* Header */}
       <h1 className="text-2xl font-semibold text-gray-900 mb-6">
         My Tickets
       </h1>
 
-      {/* Grid */}
       {tickets.length === 0 ? (
         <p className="text-gray-500">No tickets found</p>
       ) : (
@@ -122,7 +132,6 @@ const MyTicketPage = () => {
 
                 {/* Status */}
                 <div className="flex items-center justify-between">
-
                   <span
                     className={`flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border capitalize ${
                       statusStyle[ticket.status]
@@ -131,13 +140,14 @@ const MyTicketPage = () => {
                     {statusIcon[ticket.status]}
                     {ticket.status}
                   </span>
-
                 </div>
 
                 {/* Actions */}
                 <div className="flex gap-2 mt-auto">
 
+                  {/* UPDATE */}
                   <button
+                    onClick={() => handleUpdate(ticket._id)}
                     disabled={isRejected}
                     className={`flex-1 flex items-center justify-center gap-2 text-sm px-3 py-2 rounded-lg border transition
                       ${
@@ -150,6 +160,7 @@ const MyTicketPage = () => {
                     Update
                   </button>
 
+                  {/* DELETE */}
                   <button
                     onClick={() => handleDelete(ticket._id)}
                     disabled={isRejected}
@@ -169,7 +180,6 @@ const MyTicketPage = () => {
               </div>
             );
           })}
-
         </div>
       )}
     </div>
