@@ -19,6 +19,7 @@ const RegistrationPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
         console.log(formData);
     };
 
@@ -93,7 +94,7 @@ const RegistrationPage = () => {
 
                 <p className="text-center text-sm text-gray-600 mt-6">
                     Already have an account?{' '}
-                    <Link 
+                    <Link
                         href="/auth/login"
                         className="text-green-600 font-medium hover:underline"
                     >
