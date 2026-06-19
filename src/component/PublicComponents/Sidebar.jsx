@@ -96,7 +96,7 @@ const Sidebar = () => {
 
     return (
         <>
-            <div className="top-0 left-0 min-h-screen bg-white rounded-b-lg shadow-sm border-r z-50 transition-all duration-300 flex flex-col w-16 sm:w-64">
+            <div className="top-0 left-0 min-h-screen bg-white rounded-b-lg shadow-sm border-r transition-all duration-300 flex flex-col w-16 sm:w-64">
 
                 <div className="h-16 flex items-center px-4 border-b justify-center sm:justify-start sm:px-6">
                     <h1 className="text-xl font-bold text-green-600 truncate">

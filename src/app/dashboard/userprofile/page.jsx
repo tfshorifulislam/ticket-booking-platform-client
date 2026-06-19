@@ -9,8 +9,8 @@ const UserProfile = () => {
 
   if (isPending) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-6">
-        Loading Profile...
+      <div className="max-w-3xl mx-auto px-4 py-12 animate-pulse">
+        <div className="h-24 bg-gray-100 rounded-xl" />
       </div>
     );
   }
@@ -19,70 +19,100 @@ const UserProfile = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
-        
-        {/* Cover */}
-        <div className="h-32 bg-green-600" />
 
-        {/* Profile Section */}
-        <div className="px-6 pb-6">
-          <div className="-mt-14">
-            {user?.image ? (
-              <Image
-                src={user.image}
-                alt={user.name || 'User'}
-                width={100}
-                height={100}
-                className="rounded-full border-4 border-white object-cover"
-              />
-            ) : (
-              <div className="w-[100px] h-[100px] rounded-full border-4 border-white bg-gray-200 flex items-center justify-center text-3xl font-bold text-gray-600">
-                {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-              </div>
-            )}
-          </div>
+      {/* Card */}
+      <div className="relative overflow-hidden rounded-2xl border border-green-100 bg-white shadow-sm">
 
-          <div className="mt-4">
-            <h2 className="text-2xl font-bold text-gray-800">
-              {user?.name || 'Unknown User'}
-            </h2>
+        {/* soft green glow background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-white to-emerald-50" />
 
-            <p className="text-gray-500">
-              {user?.email || 'No Email'}
-            </p>
-          </div>
+        <div className="relative p-6 sm:p-10">
 
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-            
-            <div className="p-4 rounded-xl bg-gray-50">
-              <p className="text-sm text-gray-500">Full Name</p>
-              <p className="font-semibold text-gray-800">
-                {user?.name || 'N/A'}
-              </p>
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+
+            {/* Avatar */}
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border border-green-100 bg-white shadow-sm flex items-center justify-center">
+
+              {user?.image ? (
+                <Image
+                  src={user.image}
+                  alt={user.name}
+                  width={112}
+                  height={112}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-2xl font-semibold text-green-600">
+                  {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                </span>
+              )}
+
             </div>
 
-            <div className="p-4 rounded-xl bg-gray-50">
-              <p className="text-sm text-gray-500">Email</p>
-              <p className="font-semibold text-gray-800">
-                {user?.email || 'N/A'}
-              </p>
-            </div>
+            {/* Info */}
+            <div className="text-center sm:text-left">
 
-            <div className="p-4 rounded-xl bg-gray-50">
-              <p className="text-sm text-gray-500">Role</p>
-              <p className="font-semibold capitalize text-gray-800">
-                {user?.role || 'N/A'}
-              </p>
-            </div>
+              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">
+                {user?.name || 'Anonymous User'}
+              </h1>
 
-            <div className="p-4 rounded-xl bg-gray-50">
-              <p className="text-sm text-gray-500">User ID</p>
-              <p className="font-semibold text-gray-800 break-all">
-                {user?.id || 'N/A'}
+              <p className="text-sm text-gray-500 mt-1">
+                {user?.email}
               </p>
+
+              <span className="inline-flex mt-3 px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100 capitalize">
+                {user?.role || 'user'}
+              </span>
+
             </div>
 
           </div>
+
+          {/* Divider */}
+          <div className="my-8 border-t border-green-100" />
+
+          {/* Info Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+            <div className="p-4 rounded-xl bg-white border border-green-100 hover:shadow-sm transition">
+              <p className="text-xs text-gray-400 uppercase tracking-wider">
+                Full Name
+              </p>
+              <p className="mt-1 text-gray-900 font-medium">
+                {user?.name || '—'}
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-white border border-green-100 hover:shadow-sm transition">
+              <p className="text-xs text-gray-400 uppercase tracking-wider">
+                Email
+              </p>
+              <p className="mt-1 text-gray-900 font-medium break-all">
+                {user?.email || '—'}
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-white border border-green-100 hover:shadow-sm transition">
+              <p className="text-xs text-gray-400 uppercase tracking-wider">
+                Role
+              </p>
+              <p className="mt-1 text-green-600 font-semibold capitalize">
+                {user?.role || 'user'}
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-white border border-green-100 hover:shadow-sm transition">
+              <p className="text-xs text-gray-400 uppercase tracking-wider">
+                User ID
+              </p>
+              <p className="mt-1 text-xs font-mono text-gray-500 break-all">
+                {user?.id || '—'}
+              </p>
+            </div>
+
+          </div>
+
         </div>
       </div>
     </div>
