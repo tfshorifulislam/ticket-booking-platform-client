@@ -18,7 +18,7 @@ const AdminProfile = () => {
   const user = session?.user;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10">
+    <div className="max-w-4xl mx-auto">
 
       {/* Card */}
       <div className="relative overflow-hidden rounded-2xl border border-green-100 bg-white shadow-sm">
