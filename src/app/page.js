@@ -1,4 +1,5 @@
 import PublicBanner from '@/component/PublicComponents/Banner';
+import ContactUs from '@/component/PublicComponents/ContactUs';
 import PlatformStats from '@/component/PublicComponents/PlatoormStats';
 import PopularRoutes from '@/component/PublicComponents/PopularRoutes';
 import Reviews from '@/component/PublicComponents/Review';
@@ -10,11 +11,12 @@ const PublicHomePage = () => {
   return (
     <div>
       <PublicBanner />
-      <TrustedCompanies/>
+      <TrustedCompanies />
       <PopularRoutes />
       <WhyChooseUs />
       <PlatformStats />
-      <Reviews/>
+      <Reviews />
+      <ContactUs />
     </div>
   );
 };
