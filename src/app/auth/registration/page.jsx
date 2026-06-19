@@ -1,5 +1,6 @@
 'use client';
 
+import { RegistrationRole } from '@/component/PublicComponents/RegistrationRole';
 import { signUp } from '@/lib/auth-client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -11,6 +12,7 @@ const RegistrationPage = () => {
         name: '',
         email: '',
         password: '',
+        role:'user'
     });
 
     const handleChange = (e) => {
@@ -22,13 +24,13 @@ const RegistrationPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { name, email, password } = formData;
+        const { name, email, password , role} = formData;
 
         const { data, error } = await signUp.email({
             email,
             password,
-            name
-            // role: role,
+            name,
+            role
         })
 
         if (error) {
@@ -90,6 +92,12 @@ const RegistrationPage = () => {
                             required
                         />
                     </div>
+
+                    <RegistrationRole
+                        name="role"
+                        value={formData.role}
+                        onChange={handleChange}
+                    />
 
                     {/* Password */}
                     <div>
