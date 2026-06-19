@@ -25,7 +25,7 @@ const Sidebar = () => {
         user: [
             {
                 name: 'User Profile',
-                href: '/dashboard/profile',
+                href: '/dashboard/userprofile',
                 icon: <FaRegUserCircle />,
             },
             {
