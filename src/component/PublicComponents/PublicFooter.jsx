@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import { FaBus, FaFacebookF, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import { SiStripe } from 'react-icons/si';
@@ -7,8 +8,6 @@ const PublicFooter = () => {
         <footer className="bg-slate-900 text-gray-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-
-                    {/* Column 1 */}
                     <div>
                         <div className="flex items-center gap-2 mb-4">
                             <FaBus className="text-2xl text-green-500" />
@@ -16,60 +15,53 @@ const PublicFooter = () => {
                                 TicketBari
                             </h2>
                         </div>
-
                         <p className="text-sm leading-6 text-gray-400">
                             Book bus, train, launch & flight tickets easily.
                             Fast, secure and hassle-free ticket booking
                             platform for all your travel needs.
                         </p>
                     </div>
-
-                    {/* Column 2 */}
                     <div>
                         <h3 className="text-lg font-semibold text-white mb-4">
                             Quick Links
                         </h3>
-
                         <ul className="space-y-3">
                             <li>
-                                <a
+                                <Link
                                     href="/"
-                                    className="hover:text-green-400 transition"
-                                >
+                                    className="hover:text-green-400 transition">
                                     Home
-                                </a>
+                                </Link>
                             </li>
 
                             <li>
-                                <a
+                                <Link
                                     href="/tickets"
                                     className="hover:text-green-400 transition"
                                 >
                                     All Tickets
-                                </a>
+                                </Link>
                             </li>
 
                             <li>
-                                <a
+                                <Link
                                     href="/contact"
                                     className="hover:text-green-400 transition"
                                 >
                                     Contact Us
-                                </a>
+                                </Link>
                             </li>
 
                             <li>
-                                <a
+                                <Link
                                     href="/about"
                                     className="hover:text-green-400 transition"
                                 >
                                     About
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
-
-                    {/* Column 3 */}
                     <div>
                         <h3 className="text-lg font-semibold text-white mb-4">
                             Contact Info
@@ -88,17 +80,15 @@ const PublicFooter = () => {
 
                             <div className="flex items-center gap-3">
                                 <FaFacebookF className="text-green-500" />
-                                <a
+                                <Link
                                     href="#"
                                     className="hover:text-green-400 transition"
                                 >
                                     Facebook Page
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>
-
-                    {/* Column 4 */}
                     <div>
                         <h3 className="text-lg font-semibold text-white mb-4">
                             Payment Methods
@@ -116,8 +106,6 @@ const PublicFooter = () => {
 
                 </div>
             </div>
-
-            {/* Bottom Bar */}
             <div className="border-t border-slate-800">
                 <div className="max-w-7xl mx-auto px-4 py-5 text-center text-sm text-gray-400">
                     © 2025 TicketBari. All rights reserved.
