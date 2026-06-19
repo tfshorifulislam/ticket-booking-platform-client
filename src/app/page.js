@@ -1,4 +1,5 @@
 import PublicBanner from '@/component/PublicComponents/Banner';
+import PlatformStats from '@/component/PublicComponents/PlatoormStats';
 import WhyChooseUs from '@/component/PublicComponents/WhyChooseUs';
 import React from 'react';
 
@@ -7,6 +8,7 @@ const PublicHomePage = () => {
     <div>
       <PublicBanner/>
       <WhyChooseUs/>
+      <PlatformStats/>
     </div>
   );
 };
