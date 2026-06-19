@@ -1,36 +1,27 @@
 'use client';
 
-import { RegistrationRole } from '@/component/PublicComponents/RegistrationRole';
 import { signUp } from '@/lib/auth-client';
+import { Label, Radio, RadioGroup } from '@heroui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const RegistrationPage = () => {
     const router = useRouter()
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        role:'user'
-    });
+    const [role, setRole] = useState("user");
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-    const handleSubmit = async (e) => {
+    const handleSingUp = async (e) => {
         e.preventDefault();
-        const { name, email, password , role} = formData;
+
+        const formData = new FormData(e.currentTarget);
+        const userData = Object.fromEntries(formData.entries());
+        console.log(userData);
 
         const { data, error } = await signUp.email({
-            email,
-            password,
-            name,
-            role
+            email: userData.email,
+            password: userData.password,
+            name: userData.name,
+            role: role,
         })
 
         if (error) {
@@ -60,7 +51,7 @@ const RegistrationPage = () => {
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSingUp} className="space-y-5">
                     {/* Name */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -69,11 +60,15 @@ const RegistrationPage = () => {
                         <input
                             type="text"
                             name="name"
-                            value={formData.name}
-                            onChange={handleChange}
                             placeholder="Enter your name"
                             className="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                             required
+                            validate={(value) => {
+                                if (value.length < 2) {
+                                    return "Name must be at least 2 characters";
+                                }
+                                return null;
+                            }}
                         />
                     </div>
 
@@ -85,19 +80,48 @@ const RegistrationPage = () => {
                         <input
                             type="email"
                             name="email"
-                            value={formData.email}
-                            onChange={handleChange}
+                            validate={(value) => {
+                                if (
+                                    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)
+                                ) {
+                                    return "Please enter a valid email address";
+                                }
+                                return null;
+                            }}
                             placeholder="Enter your email"
                             className="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                             required
                         />
                     </div>
 
-                    <RegistrationRole
-                        name="role"
-                        value={formData.role}
-                        onChange={handleChange}
-                    />
+                    {/* Role */}
+                    <div className="flex flex-col gap-4">
+                        <Label>Role</Label>
+
+                        <RadioGroup
+                            onChange={(value) => setRole(value)}
+                            defaultValue="user"
+                            name="user"
+                            orientation="horizontal"
+                        >
+                            <Radio value="user">
+                                <Radio.Content>
+                                    <Radio.Control>
+                                        <Radio.Indicator />
+                                    </Radio.Control>
+                                    User
+                                </Radio.Content>
+                            </Radio>
+                            <Radio value="vendor">
+                                <Radio.Content>
+                                    <Radio.Control>
+                                        <Radio.Indicator />
+                                    </Radio.Control>
+                                    Vendor
+                                </Radio.Content>
+                            </Radio>
+                        </RadioGroup>
+                    </div>
 
                     {/* Password */}
                     <div>
@@ -105,10 +129,24 @@ const RegistrationPage = () => {
                             Password
                         </label>
                         <input
-                            type="password"
+                            minLength={8}
                             name="password"
-                            value={formData.password}
-                            onChange={handleChange}
+                            type="password"
+                            validate={(value) => {
+                                if (value.length < 8) {
+                                    return "Password must be at least 8 characters";
+                                }
+
+                                if (!/[A-Z]/.test(value)) {
+                                    return "Password must contain at least one uppercase letter";
+                                }
+
+                                if (!/[0-9]/.test(value)) {
+                                    return "Password must contain at least one number";
+                                }
+
+                                return null;
+                            }}
                             placeholder="Enter your password"
                             className="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                             required

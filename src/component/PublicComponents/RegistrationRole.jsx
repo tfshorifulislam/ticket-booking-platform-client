@@ -1,12 +1,12 @@
 import { Description, Label, Radio, RadioGroup } from "@heroui/react";
 
-export function RegistrationRole() {
+export function RegistrationRole({value, onChange}) {
     return (
-        <RadioGroup defaultValue="premium" name="plan">
+        <RadioGroup defaultValue="user" name={value}>
             <Label>Role</Label>
             <Description>Choose your role</Description>
             <div className="flex sm:gap-5 flex-col sm:flex-row">
-                <Radio value="basic">
+                <Radio value="user" onChange={value}>
                     <Radio.Content>
                         <Radio.Control>
                             <Radio.Indicator />
@@ -14,7 +14,7 @@ export function RegistrationRole() {
                         User
                     </Radio.Content>
                 </Radio>
-                <Radio value="premium">
+                <Radio value="vendor" >
                     <Radio.Content>
                         <Radio.Control>
                             <Radio.Indicator />
