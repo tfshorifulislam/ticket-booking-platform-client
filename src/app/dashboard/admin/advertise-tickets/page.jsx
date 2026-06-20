@@ -74,9 +74,9 @@ const AdvertiseTicketsPage = () => {
           prev.map((t) =>
             t._id === ticket._id
               ? {
-                  ...t,
-                  advertised: !t.advertised,
-                }
+                ...t,
+                advertised: !t.advertised,
+              }
               : t
           )
         );
@@ -150,107 +150,94 @@ const AdvertiseTicketsPage = () => {
         {/* TABLE */}
 
         {tickets.length > 0 && (
-          <div className="bg-white rounded-3xl shadow-sm overflow-hidden border">
-
+          <div className="bg-white rounded-3xl shadow-sm overflow-hidden border border-gray-100">
             <div className="overflow-x-auto">
-
-              <table className="table">
-
-                <thead className="bg-green-50">
-
+              <table className="table w-full">
+                <thead className="bg-green-50 border-b border-green-100">
                   <tr>
-
-                    <th>Ticket</th>
-
-                    <th>Route</th>
-
-                    <th>Price</th>
-
-                    <th>Status</th>
-
-                    <th>Action</th>
-
+                    <th className="text-left py-5 px-6 font-semibold text-gray-700">Ticket</th>
+                    <th className="text-left py-5 px-6 font-semibold text-gray-700">Route</th>
+                    <th className="text-left py-5 px-6 font-semibold text-gray-700">Price</th>
+                    <th className="text-left py-5 px-6 font-semibold text-gray-700">Status</th>
+                    <th className="text-center py-5 px-6 font-semibold text-gray-700">Action</th>
                   </tr>
-
                 </thead>
-
-                <tbody>
-
+                <tbody className="divide-y divide-gray-100">
                   {tickets.map((ticket) => (
                     <tr
                       key={ticket._id}
-                      className="hover:bg-green-50/30"
+                      className="hover:bg-green-50/50 transition-colors duration-200"
                     >
-                      <td>
-
-                        <div className="flex items-center gap-3">
-
-                          <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
-                            <FaBus className="text-green-600" />
+                      {/* Ticket Column */}
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center flex-shrink-0">
+                            <FaBus className="text-2xl text-green-600" />
                           </div>
-
                           <div>
-                            <h3 className="font-semibold">
-                              {ticket.title}
-                            </h3>
+                            <h3 className="font-semibold text-gray-800">{ticket.title}</h3>
+                            <p className="text-sm text-gray-500 mt-0.5">ID: {ticket._id.slice(-6)}</p>
                           </div>
-
                         </div>
-
                       </td>
 
-                      <td>
-                        {ticket.from} → {ticket.to}
+                      {/* Route */}
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-2 text-gray-700">
+                          <span className="font-medium">{ticket.from}</span>
+                          <span className="text-green-500">→</span>
+                          <span className="font-medium">{ticket.to}</span>
+                        </div>
                       </td>
 
-                      <td className="font-bold text-green-600">
-                        ৳ {ticket.price}
+                      {/* Price */}
+                      <td className="px-6 py-5">
+                        <span className="font-bold text-2xl text-green-600">
+                          ৳{ticket.price}
+                        </span>
                       </td>
 
-                      <td>
-
+                      {/* Status */}
+                      <td className="px-6 py-5">
                         {ticket.advertised ? (
-                          <span className="badge badge-success badge-lg">
-                            Advertised
+                          <span className="badge badge-success badge-lg px-5 py-2 font-medium">
+                            ✓ Advertised
                           </span>
                         ) : (
-                          <span className="badge badge-neutral badge-lg">
+                          <span className="badge badge-neutral badge-lg px-5 py-2 font-medium">
                             Not Active
                           </span>
                         )}
-
                       </td>
 
-                      <td>
-
+                      {/* Action */}
+                      <td className="px-6 py-5 text-center">
                         <button
                           onClick={() => handleToggle(ticket)}
                           disabled={updatingId === ticket._id}
-                          className="flex items-center gap-2 font-medium"
+                          className={`flex items-center gap-3 mx-auto font-medium transition-all duration-200 px-5 py-2.5 rounded-2xl ${ticket.advertised
+                            ? "text-red-600 hover:bg-red-50"
+                            : "text-green-600 hover:bg-green-50"
+                            } disabled:opacity-50`}
                         >
                           {ticket.advertised ? (
                             <>
                               <FaToggleOn className="text-4xl text-green-600" />
-                              Unadvertise
+                              <span>Unadvertise</span>
                             </>
                           ) : (
                             <>
-                              <FaToggleOff className="text-4xl text-slate-400" />
-                              Advertise
+                              <FaToggleOff className="text-4xl text-gray-400" />
+                              <span>Advertise</span>
                             </>
                           )}
                         </button>
-
                       </td>
                     </tr>
                   ))}
-
                 </tbody>
-
               </table>
-
             </div>
-
           </div>
         )}
       </div>
