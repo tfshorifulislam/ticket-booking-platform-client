@@ -7,6 +7,7 @@ import {
   FaBullhorn,
   FaBus,
 } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const AdvertiseTicketsPage = () => {
   const [tickets, setTickets] = useState([]);
@@ -48,11 +49,13 @@ const AdvertiseTicketsPage = () => {
   const handleToggle = async (ticket) => {
     try {
       if (!ticket.advertised && advertisedCount >= 6) {
-        alert('Maximum 6 advertised tickets allowed');
+        toast.error('Maximum 6 advertised tickets allowed');
         return;
       }
 
-      setUpdatingId(ticket._id);
+      else {
+        setUpdatingId(ticket._id);
+      }
 
       const res = await fetch(
         `http://localhost:5000/api/advertise-ticket/${ticket._id}`,

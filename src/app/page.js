@@ -1,3 +1,4 @@
+import AdvertiseTickets from '@/component/AdminComponents/AdvertiseTickets';
 import PublicBanner from '@/component/PublicComponents/Banner';
 import ContactUs from '@/component/PublicComponents/ContactUs';
 import PlatformStats from '@/component/PublicComponents/PlatoormStats';
@@ -12,6 +13,7 @@ const PublicHomePage = () => {
     <div>
       <PublicBanner />
       <TrustedCompanies />
+      <AdvertiseTickets/>
       <PopularRoutes />
       <WhyChooseUs />
       <PlatformStats />
