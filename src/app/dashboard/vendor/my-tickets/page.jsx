@@ -1,3 +1,4 @@
+import { MyTicketUpdate } from "@/component/VendorComponents/MyTicketUpdate";
 import { getVendorTickets } from "@/lib/api/ticket";
 import { auth } from "@/lib/auth";
 import { Table } from "@heroui/react";
@@ -28,7 +29,7 @@ const MyTicketPage = async () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50 pb-12">
       <div className="max-w-7xl mx-auto px-4 py-10">
-        
+
         {/* Beautiful Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10">
           <div>
@@ -37,7 +38,7 @@ const MyTicketPage = async () => {
           </div>
 
           <a
-            href="/add-ticket"
+            href="/dashboard/vendor/add-ticket"
             className="mt-4 sm:mt-0 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-medium flex items-center gap-2 transition"
           >
             + Add New Ticket
@@ -48,11 +49,11 @@ const MyTicketPage = async () => {
         <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
           <Table>
             <Table.ScrollContainer>
-              <Table.Content 
-                aria-label="Vendor Tickets" 
+              <Table.Content
+                aria-label="Vendor Tickets"
                 className="min-w-[1000px]"
               >
-                
+
                 <Table.Header>
                   <Table.Column className="font-semibold text-gray-700">Ticket Title</Table.Column>
                   <Table.Column className="font-semibold text-gray-700">Route</Table.Column>
@@ -67,7 +68,7 @@ const MyTicketPage = async () => {
 
                     return (
                       <Table.Row key={ticket._id} className="hover:bg-gray-50 transition-colors">
-                        
+
                         <Table.Cell className="font-medium text-gray-800">
                           {ticket.title}
                         </Table.Cell>
@@ -95,25 +96,23 @@ const MyTicketPage = async () => {
 
                         <Table.Cell>
                           <div className="flex items-center justify-center gap-3">
-                            <button
+                            <div
                               disabled={isRejected}
-                              className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-medium transition-all ${
-                                isRejected
-                                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                                  : "bg-blue-600 hover:bg-blue-700 text-white"
-                              }`}
+                              className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-medium transition-all ${isRejected && "bg-gray-200 text-gray-400 cursor-not-allowed"
+
+                                }`}
                             >
-                              <FaEdit className="w-4 h-4" />
-                              Update
-                            </button>
+                              <MyTicketUpdate
+                                vendorTicket={vendorTicket}
+                              />
+                            </div>
 
                             <button
                               disabled={isRejected}
-                              className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-medium transition-all ${
-                                isRejected
-                                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                                  : "bg-red-600 hover:bg-red-700 text-white"
-                              }`}
+                              className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-medium transition-all ${isRejected
+                                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                                : "bg-red-600 hover:bg-red-700 text-white"
+                                }`}
                             >
                               <FaTrash className="w-4 h-4" />
                               Delete
