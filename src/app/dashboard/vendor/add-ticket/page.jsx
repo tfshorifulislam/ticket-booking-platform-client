@@ -4,15 +4,7 @@ import React, { useState } from 'react';
 import { useSession } from '@/lib/auth-client';
 import { Upload, Calendar, MapPin, Users, Tag, Award } from 'lucide-react';
 
-import {
-  TextField,
-  Input,
-  Label,
-  Select,
-  ListBox,
-  CheckboxGroup,
-  Checkbox
-} from "@heroui/react";
+import { TextField,Input, Label, Select,ListBox, CheckboxGroup, Checkbox } from "@heroui/react";
 
 const AddTicketPage = () => {
 
@@ -35,16 +27,7 @@ const AddTicketPage = () => {
   const [message, setMessage] = useState(null);
 
   // Available Perks
-  const perksList = [
-    'AC',
-    'WiFi',
-    'Breakfast',
-    'Dinner',
-    'Water Bottle',
-    'Charging Port',
-    'Recliner Seat',
-    'CCTV'
-  ];
+  const perksList = ['AC', 'WiFi', 'Breakfast', 'Dinner', 'Water Bottle', 'Charging Port', 'Recliner Seat', 'CCTV'];
 
   // Handle Form Submit
   const handleSubmit = async (e) => {
@@ -60,16 +43,13 @@ const AddTicketPage = () => {
 
     try {
       let imageUrl = '';
-
       // 1. Upload Image to ImgBB
       if (form.image) {
         const imgForm = new FormData();
         imgForm.append('image', form.image);
 
-        const imgRes = await fetch(
-          `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
-          { method: 'POST', body: imgForm }
-        );
+        const imgRes = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+          { method: 'POST', body: imgForm });
 
         const imgData = await imgRes.json();
         if (imgData?.status === 200) {
@@ -93,6 +73,8 @@ const AddTicketPage = () => {
         status: 'pending',
       };
 
+      console.log(payload)
+      
       const res = await fetch('/api/tickets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -100,6 +82,7 @@ const AddTicketPage = () => {
       });
 
       const data = await res.json();
+      console.log(data)
 
       if (res.ok && data.success) {
         setMessage({ type: 'success', text: 'Ticket added successfully!' });
@@ -267,7 +250,7 @@ const AddTicketPage = () => {
                 <Label className="text-sm text-gray-500 block mb-4">Choose all that apply</Label>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {perksList.map((perk) => (
+                  {perksList.map((perk) => ( 
                     <Checkbox key={perk} value={perk} className="perk-label">
                       <Checkbox.Content>
                         <Checkbox.Control>
