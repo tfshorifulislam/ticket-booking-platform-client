@@ -38,3 +38,17 @@ export const deleteTicket = async (deleteTicket) => {
     })
     return res.json();
 }
+
+
+//booking ticket api
+export const bookingTicket = async (ticketBooking) => {
+    const res = await fetch(`${baseUrl}/api/booking-ticket`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify(ticketBooking)
+    })
+    return res.json();
+}

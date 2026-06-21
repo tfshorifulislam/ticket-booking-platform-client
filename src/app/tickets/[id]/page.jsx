@@ -4,10 +4,14 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { getTicketById } from '@/lib/api/ticket';
 import { BookingTicketModal } from '@/component/PublicComponents/BookingTicketModal';
+import { useSession } from '@/lib/auth-client';
 
 const TicketDetailsPage = () => {
   const { id } = useParams();
 
+  const { data: session } = useSession()
+  const userEmail = session?.user?.email;
+  
   const [ticket, setTicket] = useState(null);
   const [countdown, setCountdown] = useState('');
 
@@ -160,6 +164,8 @@ const TicketDetailsPage = () => {
             <BookingTicketModal
               countdown={countdown}
               ticketQuantity={ticket.quantity}
+              ticketId={ticket._id}
+              userEmail={userEmail}
             />
           </div>
 
