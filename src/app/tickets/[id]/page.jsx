@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { getTicketById } from '@/lib/api/ticket';
+import { BookingTicketModal } from '@/component/PublicComponents/BookingTicketModal';
 
 const TicketDetailsPage = () => {
   const { id } = useParams();
@@ -21,35 +22,35 @@ const TicketDetailsPage = () => {
     }
   }, [id]);
 
-useEffect(() => {
-  if (!ticket?.dateTime) return;
+  useEffect(() => {
+    if (!ticket?.dateTime) return;
 
-  const departureTime = new Date(ticket.dateTime).getTime();
+    const departureTime = new Date(ticket.dateTime).getTime();
 
-  const interval = setInterval(() => {
-    const now = Date.now();
-    const distance = departureTime - now;
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const distance = departureTime - now;
 
-    if (distance <= 0) {
-      setCountdown('Departed');
-      clearInterval(interval);
-      return;
-    }
+      if (distance <= 0) {
+        setCountdown('Departed');
+        clearInterval(interval);
+        return;
+      }
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((distance / (1000 * 60)) % 60);
-    const seconds = Math.floor((distance / 1000) % 60);
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
 
-    setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
-  }, 1000);
+      setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+    }, 1000);
 
-  return () => clearInterval(interval);
-}, [ticket?.dateTime]);
+    return () => clearInterval(interval);
+  }, [ticket?.dateTime]);
 
-console.log("DATE:", ticket?.dateTime);
-console.log("PARSED:", new Date(ticket?.dateTime).toString());
-console.log("NOW:", new Date().toString());
+  console.log("DATE:", ticket?.dateTime);
+  console.log("PARSED:", new Date(ticket?.dateTime).toString());
+  console.log("NOW:", new Date().toString());
 
   if (!ticket) {
     return (
@@ -147,17 +148,17 @@ console.log("NOW:", new Date().toString());
 
           </div>
 
-          <button
+          <div
             disabled={
               isExpired || isSoldOut
             }
-            className={`mt-8 w-full py-3 rounded-xl font-semibold ${isExpired || isSoldOut
+            className={`mt-8 cursor-pointer w-full rounded-xl flex justify-center ${isExpired || isSoldOut
               ? 'bg-gray-300 cursor-not-allowed'
               : 'bg-green-600 hover:bg-green-700 text-white'
               }`}
           >
-            Book Now
-          </button>
+            <BookingTicketModal />
+          </div>
 
         </div>
 
