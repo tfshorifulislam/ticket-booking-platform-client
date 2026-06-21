@@ -21,45 +21,35 @@ const TicketDetailsPage = () => {
     }
   }, [id]);
 
-  useEffect(() => {
-    if (!ticket?.dateTime) return;
+useEffect(() => {
+  if (!ticket?.dateTime) return;
 
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const departure = new Date(ticket.dateTime).getTime();
+  const departureTime = new Date(ticket.dateTime).getTime();
 
-      const distance = departure - now;
+  const interval = setInterval(() => {
+    const now = Date.now();
+    const distance = departureTime - now;
 
-      if (distance <= 0) {
-        setCountdown('Departed');
-        return;
-      }
+    if (distance <= 0) {
+      setCountdown('Departed');
+      clearInterval(interval);
+      return;
+    }
 
-      const days = Math.floor(
-        distance / (1000 * 60 * 60 * 24)
-      );
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((distance / (1000 * 60)) % 60);
+    const seconds = Math.floor((distance / 1000) % 60);
 
-      const hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) /
-        (1000 * 60 * 60)
-      );
+    setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+  }, 1000);
 
-      const minutes = Math.floor(
-        (distance % (1000 * 60 * 60)) /
-        (1000 * 60)
-      );
+  return () => clearInterval(interval);
+}, [ticket?.dateTime]);
 
-      const seconds = Math.floor(
-        (distance % (1000 * 60)) / 1000
-      );
-
-      setCountdown(
-        `${days}d ${hours}h ${minutes}m ${seconds}s`
-      );
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [ticket]);
+console.log("DATE:", ticket?.dateTime);
+console.log("PARSED:", new Date(ticket?.dateTime).toString());
+console.log("NOW:", new Date().toString());
 
   if (!ticket) {
     return (
@@ -162,8 +152,8 @@ const TicketDetailsPage = () => {
               isExpired || isSoldOut
             }
             className={`mt-8 w-full py-3 rounded-xl font-semibold ${isExpired || isSoldOut
-                ? 'bg-gray-300 cursor-not-allowed'
-                : 'bg-green-600 hover:bg-green-700 text-white'
+              ? 'bg-gray-300 cursor-not-allowed'
+              : 'bg-green-600 hover:bg-green-700 text-white'
               }`}
           >
             Book Now
