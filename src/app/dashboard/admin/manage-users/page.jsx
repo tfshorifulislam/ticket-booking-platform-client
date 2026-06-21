@@ -1,204 +1,209 @@
 'use client';
 
-import React, { useState } from 'react';
-import { FaUserShield, FaUserTie, FaBan } from 'react-icons/fa';
-
-const initialUsers = [
-  {
-    id: 1,
-    name: 'Rahim Uddin',
-    email: 'rahim@gmail.com',
-    role: 'user',
-    isFraud: false,
-  },
-  {
-    id: 2,
-    name: 'Karim Vendor',
-    email: 'karim@gmail.com',
-    role: 'vendor',
-    isFraud: false,
-  },
-  {
-    id: 5,
-    name: 'shamim Vendor',
-    email: 'kardsim@gmail.com',
-    role: 'vendor',
-    isFraud: false,
-  },
-  {
-    id: 3,
-    name: 'Admin User',
-    email: 'admin@gmail.com',
-    role: 'admin',
-    isFraud: false,
-  },
-];
+import React, { useEffect, useState } from 'react';
+import { FaUserShield, FaUserTie, FaBan, FaCheck } from 'react-icons/fa';
 
 const ManageUsers = () => {
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Make Admin
-  const handleMakeAdmin = (id) => {
-    const updated = users.map((u) =>
-      u.id === id
-        ? { ...u, role: 'admin' }
-        : u
-    );
-
-    setUsers(updated);
-
-    // TODO: API CALL → PATCH /users/:id { role: 'admin' }
+  // Fetch Users
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/users');
+      const data = await res.json();
+      setUsers(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Make Vendor
-  const handleMakeVendor = (id) => {
-    const updated = users.map((u) =>
-      u.id === id
-        ? { ...u, role: 'vendor', isFraud: false }
-        : u
-    );
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
-    setUsers(updated);
+  // Make Admin Action
+  const handleMakeAdmin = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/users/make-admin/${id}`, {
+        method: 'PATCH',
+      });
+      const data = await res.json();
 
-    // TODO: API CALL → PATCH /users/:id { role: 'vendor' }
+      if (data.success) {
+        setUsers((prev) =>
+          prev.map((user) =>
+            user._id === id ? { ...user, role: 'admin' } : user
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error upgrading to Admin:', error);
+    }
   };
 
-  // Mark Fraud Vendor
-  const handleMarkFraud = (id) => {
-    const updated = users.map((u) =>
-      u.id === id
-        ? { ...u, isFraud: true }
-        : u
-    );
+  // Make Vendor Action
+  const handleMakeVendor = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/users/make-vendor/${id}`, {
+        method: 'PATCH',
+      });
+      const data = await res.json();
 
-    setUsers(updated);
-
-    // TODO (IMPORTANT BACKEND LOGIC):
-    // 1. vendor.isFraud = true
-    // 2. hide all tickets of this vendor
-    // 3. block ticket creation permanently
+      if (data.success) {
+        setUsers((prev) =>
+          prev.map((user) =>
+            user._id === id
+              ? { ...user, role: 'vendor', isFraud: false }
+              : user
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error upgrading to Vendor:', error);
+    }
   };
+
+  // Mark Vendor as Fraud Action
+  const handleMarkFraud = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/users/fraud/${id}`, {
+        method: 'PATCH',
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        setUsers((prev) =>
+          prev.map((user) =>
+            user._id === id ? { ...user, isFraud: true } : user
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error flaggin fraud vendor:', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <span className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-900">
-          Manage Users
-        </h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Control user roles and vendor safety status
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Manage Users</h1>
+        <p className="text-gray-500 mt-1">
+          Control user roles and manage vendor safety
         </p>
       </div>
 
       {/* Table Container */}
-      <div className="bg-white border border-green-100 rounded-2xl shadow-sm overflow-x-auto">
+      <div className="bg-white border border-gray-200 rounded-3xl shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm">
+            <thead className="bg-green-50 border-b border-green-100">
+              <tr>
+                <th className="text-left px-6 py-5 font-semibold text-gray-700">Name</th>
+                <th className="text-left px-6 py-5 font-semibold text-gray-700">Email</th>
+                <th className="text-left px-6 py-5 font-semibold text-gray-700">Role</th>
+                <th className="text-left px-6 py-5 font-semibold text-gray-700">Status</th>
+                <th className="text-center px-6 py-5 font-semibold text-gray-700">Actions</th>
+              </tr>
+            </thead>
 
-        <table className="min-w-full text-sm">
+            <tbody className="divide-y divide-gray-100">
+              {users.map((user) => {
+                const isVendor = user.role === 'vendor';
+                const isFraud = user.isFraud;
 
-          {/* Head */}
-          <thead className="bg-green-50 text-gray-600 text-xs uppercase tracking-wider">
-            <tr>
-              <th className="text-left px-6 py-4">Name</th>
-              <th className="text-left px-6 py-4">Email</th>
-              <th className="text-left px-6 py-4">Role</th>
-              <th className="text-left px-6 py-4">Status</th>
-              <th className="text-left px-6 py-4">Actions</th>
-            </tr>
-          </thead>
+                return (
+                  <tr
+                    key={user._id}
+                    className={`hover:bg-green-50/50 transition-all ${isFraud ? 'bg-red-50/40 opacity-75' : ''}`}
+                  >
+                    <td className="px-6 py-5 font-medium text-gray-900">{user.name}</td>
+                    <td className="px-6 py-5 text-gray-600">{user.email}</td>
 
-          {/* Body */}
-          <tbody className="divide-y divide-gray-100">
-
-            {users.map((user) => {
-              const isVendor = user.role === 'vendor';
-              const isFraud = user.isFraud;
-
-              return (
-                <tr
-                  key={user.id}
-                  className={`hover:bg-green-50/40 transition ${
-                    isFraud ? 'opacity-50' : ''
-                  }`}
-                >
-
-                  {/* Name */}
-                  <td className="px-6 py-4 font-medium text-gray-900">
-                    {user.name}
-                  </td>
-
-                  {/* Email */}
-                  <td className="px-6 py-4 text-gray-600">
-                    {user.email}
-                  </td>
-
-                  {/* Role */}
-                  <td className="px-6 py-4">
-                    <span className="px-2 py-1 text-xs rounded-full border bg-gray-50 text-gray-700 capitalize">
-                      {user.role}
-                    </span>
-                  </td>
-
-                  {/* Status */}
-                  <td className="px-6 py-4">
-                    {isFraud ? (
-                      <span className="text-xs px-2 py-1 rounded-full bg-red-50 text-red-600 border border-red-100">
-                        Fraud Vendor
-                      </span>
-                    ) : (
-                      <span className="text-xs px-2 py-1 rounded-full bg-green-50 text-green-600 border border-green-100">
-                        Active
-                      </span>
-                    )}
-                  </td>
-
-                  {/* Actions */}
-                  <td className="px-6 py-4">
-
-                    <div className="flex flex-wrap gap-2">
-
-                      {/* Make Admin */}
-                      <button
-                        onClick={() => handleMakeAdmin(user.id)}
-                        className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition"
+                    {/* Role Tag */}
+                    <td className="px-6 py-5">
+                      <span
+                        className={`px-4 py-1.5 text-xs font-medium rounded-full capitalize ${
+                          user.role === 'admin'
+                            ? 'bg-indigo-100 text-indigo-700'
+                            : user.role === 'vendor'
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-gray-100 text-gray-700'
+                        }`}
                       >
-                        <FaUserShield />
-                        Admin
-                      </button>
+                        {user.role || 'user'}
+                      </span>
+                    </td>
 
-                      {/* Make Vendor */}
-                      <button
-                        onClick={() => handleMakeVendor(user.id)}
-                        className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
-                      >
-                        <FaUserTie />
-                        Vendor
-                      </button>
-
-                      {/* Fraud Button (ONLY vendor & not fraud yet) */}
-                      {isVendor && !isFraud && (
-                        <button
-                          onClick={() => handleMarkFraud(user.id)}
-                          className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
-                        >
-                          <FaBan />
-                          Fraud
-                        </button>
+                    {/* Status Tag */}
+                    <td className="px-6 py-5">
+                      {isFraud ? (
+                        <span className="px-4 py-1.5 text-xs font-medium rounded-full bg-red-100 text-red-700 border border-red-200">
+                          Fraud Vendor
+                        </span>
+                      ) : (
+                        <span className="px-4 py-1.5 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                          Active
+                        </span>
                       )}
+                    </td>
 
-                    </div>
+                    {/* Actions Row */}
+                    <td className="px-6 py-5">
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        <button
+                          onClick={() => handleMakeAdmin(user._id)}
+                          disabled={user.role === 'admin'}
+                          className="flex items-center gap-2 px-4 py-2 text-xs rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <FaUserShield />
+                          Make Admin
+                        </button>
 
-                  </td>
+                        <button
+                          onClick={() => handleMakeVendor(user._id)}
+                          disabled={user.role === 'vendor'}
+                          className="flex items-center gap-2 px-4 py-2 text-xs rounded-xl bg-green-600 hover:bg-green-700 text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <FaUserTie />
+                          Make Vendor
+                        </button>
 
-                </tr>
-              );
-            })}
+                        {isVendor && !isFraud && (
+                          <button
+                            onClick={() => handleMarkFraud(user._id)}
+                            className="flex items-center gap-2 px-4 py-2 text-xs rounded-xl bg-red-600 hover:bg-red-700 text-white transition"
+                          >
+                            <FaBan />
+                            Mark Fraud
+                          </button>
+                        )}
 
-          </tbody>
-
-        </table>
-
+                        {isVendor && isFraud && (
+                          <div className="flex items-center gap-2 px-4 py-2 text-xs rounded-xl bg-red-50 text-red-600 font-medium border border-red-200">
+                            <FaCheck />
+                            Fraud Marked
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

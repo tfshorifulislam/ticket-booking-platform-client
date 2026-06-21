@@ -5,6 +5,7 @@ import { Label, Radio, RadioGroup } from '@heroui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 const RegistrationPage = () => {
     const router = useRouter()
@@ -21,21 +22,20 @@ const RegistrationPage = () => {
             email: userData.email,
             password: userData.password,
             name: userData.name,
-            role: role,
+            role,
         })
 
         if (error) {
             console.error("Signup error:", error);
-            alert(error.message || "An error occurred during signup. Please try again.");
+            toast.error(error.message);
             return;
         }
         if (data) {
             console.log("Signup successful:", data);
-            alert("Signup successful! Please check your email to verify your account.");
+            toast.success("Signup successful! Please check your email to verify your account.");
             router.push("/");
             router.refresh();
         }
-
         console.log(formData);
     };
 
@@ -101,7 +101,7 @@ const RegistrationPage = () => {
                         <RadioGroup
                             onChange={(value) => setRole(value)}
                             defaultValue="user"
-                            name="user"
+                            name="role"
                             orientation="horizontal"
                         >
                             <Radio value="user">
