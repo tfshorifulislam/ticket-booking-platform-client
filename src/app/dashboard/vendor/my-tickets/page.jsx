@@ -99,7 +99,7 @@ const MyTicketPage = async () => {
                           <div className="flex items-center justify-center gap-3">
                             <div
                               disabled={isRejected}
-                              className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-medium transition-all ${isRejected && "bg-gray-200 text-gray-400 cursor-not-allowed"
+                              className={`${isRejected && "bg-gray-200 text-gray-400 cursor-not-allowed"
 
                                 }`}
                             >
@@ -116,7 +116,7 @@ const MyTicketPage = async () => {
 
                             <div
                               disabled={isRejected}
-                              className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-medium transition-all ${isRejected
+                              className={`${isRejected
                                 && "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
                             >
 

@@ -11,6 +11,7 @@ import {
     FaTag,
 } from 'react-icons/fa';
 import { FilterBox } from '@/component/PublicComponents/FilterBox';
+import { getAllTickets } from '@/lib/api/ticket';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -26,8 +27,9 @@ const AllTickets = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/approved-tickets');
-                const data = await res.json();
+                const data = await getAllTickets();
+
+                console.log(data); // check
 
                 setTickets(data || []);
             } catch (err) {
@@ -39,7 +41,6 @@ const AllTickets = () => {
 
         fetchTickets();
     }, []);
-
     // ================= FILTER =================
     const filteredTickets = useMemo(() => {
         return tickets.filter((ticket) => {
@@ -213,11 +214,10 @@ const AllTickets = () => {
                     <button
                         key={i}
                         onClick={() => setCurrentPage(i + 1)}
-                        className={`px-4 py-2 rounded-lg border ${
-                            currentPage === i + 1
-                                ? 'bg-green-600 text-white'
-                                : 'bg-white'
-                        }`}
+                        className={`px-4 py-2 rounded-lg border ${currentPage === i + 1
+                            ? 'bg-green-600 text-white'
+                            : 'bg-white'
+                            }`}
                     >
                         {i + 1}
                     </button>
