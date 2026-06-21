@@ -4,3 +4,4 @@ export const getVendorTickets = async ( vendorEmail, status = 'active') => {
     const res = await fetch (`${baseUrl}/api/get-user-created-tickets?vendorEmail=${vendorEmail}&status=${status}`);
     return res.json();
 }
+
