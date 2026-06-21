@@ -157,7 +157,10 @@ const TicketDetailsPage = () => {
               : 'bg-green-600 hover:bg-green-700 text-white'
               }`}
           >
-            <BookingTicketModal />
+            <BookingTicketModal
+              countdown={countdown}
+              ticketQuantity={ticket.quantity}
+            />
           </div>
 
         </div>
