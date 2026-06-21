@@ -102,8 +102,14 @@ const MyTicketPage = async () => {
 
                                 }`}
                             >
-                              <MyTicketUpdate
-                                vendorTicket={vendorTicket}
+                              <MyTicketUpdate _id={ticket._id}
+                                dateTime={ticket.dateTime}
+                                from={ticket.from}
+                                title={ticket.title}
+                                quantity={ticket.quantity}
+                                price={ticket.price}
+                                type={ticket.type}
+                                to={ticket.to}
                               />
                             </div>
 
