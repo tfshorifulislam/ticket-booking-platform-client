@@ -109,7 +109,7 @@ const Sidebar = () => {
                         return (
                             <Link
                                 key={item.href}
-                                href={item.href}z
+                                href={item.href}
                                 className={`flex items-center gap-4 p-3 rounded-xl justify-center sm:justify-start ${isActive
                                         ? 'bg-green-600 text-white'
                                         : 'text-gray-600 hover:bg-green-50 hover:text-green-600'}`}>
