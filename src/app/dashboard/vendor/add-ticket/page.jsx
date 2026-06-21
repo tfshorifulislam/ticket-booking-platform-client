@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import { useSession } from '@/lib/auth-client';
 import { Upload, Calendar, MapPin, Users, Tag, Award } from 'lucide-react';
 
-import { TextField,Input, Label, Select,ListBox, CheckboxGroup, Checkbox } from "@heroui/react";
+import { TextField, Input, Label, Select, ListBox, CheckboxGroup, Checkbox } from "@heroui/react";
 import { createTicket } from '@/lib/actions/addTicket';
+import { toast } from 'react-toastify';
 
 const AddTicketPage = () => {
 
@@ -72,9 +73,13 @@ const AddTicketPage = () => {
         vendorName: session.user.name,
         vendorEmail: session.user.email,
         status: 'pending',
-      };  
+      };
 
-     const res = await createTicket(payload)
+      const res = await createTicket(payload)
+      if (res.insertedId) {
+        toast.success('Ticket add successfull');
+        e.target.reset();
+      }
 
       const data = await res.json();
       console.log(data)
@@ -99,7 +104,6 @@ const AddTicketPage = () => {
       }
     } catch (error) {
       console.error(error);
-      setMessage({ type: 'error', text: 'Something went wrong. Please try again!' });
     } finally {
       setIsSubmitting(false);
     }
@@ -245,7 +249,7 @@ const AddTicketPage = () => {
                 <Label className="text-sm text-gray-500 block mb-4">Choose all that apply</Label>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {perksList.map((perk) => ( 
+                  {perksList.map((perk) => (
                     <Checkbox key={perk} value={perk} className="perk-label">
                       <Checkbox.Content>
                         <Checkbox.Control>

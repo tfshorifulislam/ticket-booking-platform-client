@@ -1,4 +1,4 @@
-'user server'
+'use server'
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export const createTicket = async (newTicket) => {
