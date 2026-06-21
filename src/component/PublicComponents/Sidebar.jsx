@@ -97,34 +97,23 @@ const Sidebar = () => {
     return (
         <>
             <div className="top-0 left-0 min-h-screen bg-white rounded-b-lg shadow-sm border-r transition-all duration-300 flex flex-col w-16 sm:w-64">
-
                 <div className="h-16 flex items-center px-4 border-b justify-center sm:justify-start sm:px-6">
                     <h1 className="text-xl font-bold text-green-600 truncate">
-
                         <span><FaBus className="text-2xl text-green-600 block sm:hidden" /></span>
                         <span className="hidden sm:block">Ticket System</span>
                     </h1>
                 </div>
-
                 <nav className="p-2 sm:p-4 space-y-2 flex-1 overflow-y-auto">
                     {menuItems.map((item) => {
                         const isActive = pathname === item.href;
-
                         return (
                             <Link
                                 key={item.href}
-                                href={item.href}
-                                className={`
-        flex items-center gap-4 p-3 rounded-xl
-        justify-center sm:justify-start
-        ${isActive
+                                href={item.href}z
+                                className={`flex items-center gap-4 p-3 rounded-xl justify-center sm:justify-start ${isActive
                                         ? 'bg-green-600 text-white'
-                                        : 'text-gray-600 hover:bg-green-50 hover:text-green-600'
-                                    }
-      `}
-                            >
+                                        : 'text-gray-600 hover:bg-green-50 hover:text-green-600'}`}>
                                 <span className="text-xl shrink-0">{item.icon}</span>
-
                                 <span className="hidden sm:block text-sm font-medium">
                                     {item.name}
                                 </span>
