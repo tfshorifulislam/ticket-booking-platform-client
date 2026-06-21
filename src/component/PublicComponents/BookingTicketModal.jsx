@@ -2,7 +2,6 @@
 
 import { bookingTicket } from '@/lib/actions/addTicket';
 import { Button, Input, Modal, Surface, TextField } from '@heroui/react';
-import { success } from 'better-auth';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -11,6 +10,10 @@ export function BookingTicketModal({
     ticketQuantity,
     countdown,
     userEmail,
+    title,
+    image,
+    status,
+    departure
 }) {
     const [quantity, setQuantity] = useState('');
 
@@ -18,6 +21,7 @@ export function BookingTicketModal({
         e.preventDefault();
 
         const qty = Number(quantity);
+
 
         if (!qty || qty < 1) {
             toast.error('Please enter a valid quantity');
@@ -38,6 +42,10 @@ export function BookingTicketModal({
             ticketId,
             quantity: qty,
             userEmail,
+            title,
+            image,
+            status,
+            departure
         };
 
         const res = await bookingTicket(bookingData);
