@@ -30,6 +30,7 @@ export function BookingTicketModal({ ticketQuantity, countdown }) {
     toast.success(`Successfully booked ${qty} ticket(s)`);
 
     // এখানে API call করবে
+     setQuantity('');
   };
 
   return (
@@ -64,7 +65,7 @@ export function BookingTicketModal({ ticketQuantity, countdown }) {
                     />
                   </TextField>
 
-                  <Button type="submit" slot="close" className="bg-green-700">
+                  <Button type="submit" onChange={(e) => setQuantity(e.target.value)} slot="close" className="bg-green-700">
                     Book Ticket
                   </Button>
                 </form>
