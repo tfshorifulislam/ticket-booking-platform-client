@@ -26,3 +26,15 @@ export const ticketUpdate = async (updateTicket) => {
     })
     return res.json();
 }
+
+// delete ticket api
+export const deleteTicket = async (deleteTicket) => {
+    const res = await fetch(`${baseUrl}/api/delete-ticket-info`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(deleteTicket)
+    })
+    return res.json();
+}

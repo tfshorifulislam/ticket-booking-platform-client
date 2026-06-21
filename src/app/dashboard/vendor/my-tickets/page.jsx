@@ -120,7 +120,7 @@ const MyTicketPage = async () => {
                                 && "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
                             >
 
-                              <DeleteTicket />
+                              <DeleteTicket _id={ticket._id} />
                             </div>
                           </div>
                         </Table.Cell>

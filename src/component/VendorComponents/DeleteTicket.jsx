@@ -1,33 +1,52 @@
 "use client";
 
+import { deleteTicket } from "@/lib/actions/addTicket";
 import { AlertDialog, Button } from "@heroui/react";
+import { redirect } from "next/navigation";
 
-export function DeleteTicket() {
+export function DeleteTicket({ _id }) {
+
+    const handleDelete = async () => {
+        const res = await deleteTicket({ _id });
+        redirect('/dashboard/vendor/my-tickets')
+     };
+
     return (
         <AlertDialog>
             <Button variant="danger">Delete</Button>
+
             <AlertDialog.Backdrop>
                 <AlertDialog.Container>
                     <AlertDialog.Dialog className="sm:max-w-[400px]">
+
                         <AlertDialog.CloseTrigger />
+
                         <AlertDialog.Header>
-                            <AlertDialog.Icon status="danger" />
-                            <AlertDialog.Heading>Delete Ticket permanently?</AlertDialog.Heading>
+                            <AlertDialog.Heading>
+                                Delete Ticket permanently?
+                            </AlertDialog.Heading>
                         </AlertDialog.Header>
+
                         <AlertDialog.Body>
                             <p>
-                                This will permanently delete <strong>My Awesome Project</strong> and all of its
-                                data. This action cannot be undone.
+                                This action cannot be undone.
                             </p>
                         </AlertDialog.Body>
+
                         <AlertDialog.Footer>
                             <Button slot="close" variant="tertiary">
                                 Cancel
                             </Button>
-                            <Button slot="close" variant="danger">
+
+                            <Button
+                                onClick={handleDelete}
+                                slot="close"
+                                variant="danger"
+                            >
                                 Delete Ticket
                             </Button>
                         </AlertDialog.Footer>
+
                     </AlertDialog.Dialog>
                 </AlertDialog.Container>
             </AlertDialog.Backdrop>
