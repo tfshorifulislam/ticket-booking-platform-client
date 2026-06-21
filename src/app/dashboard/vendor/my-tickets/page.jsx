@@ -1,3 +1,4 @@
+import { DeleteTicket } from "@/component/VendorComponents/DeleteTicket";
 import { MyTicketUpdate } from "@/component/VendorComponents/MyTicketUpdate";
 import { getVendorTickets } from "@/lib/api/ticket";
 import { auth } from "@/lib/auth";
@@ -113,16 +114,14 @@ const MyTicketPage = async () => {
                               />
                             </div>
 
-                            <button
+                            <div
                               disabled={isRejected}
                               className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-medium transition-all ${isRejected
-                                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                                : "bg-red-600 hover:bg-red-700 text-white"
-                                }`}
+                                && "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
                             >
-                              <FaTrash className="w-4 h-4" />
-                              Delete
-                            </button>
+
+                              <DeleteTicket />
+                            </div>
                           </div>
                         </Table.Cell>
 
