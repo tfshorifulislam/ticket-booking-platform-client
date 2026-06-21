@@ -10,3 +10,9 @@ export const getAllTickets = async () => {
     const res = await fetch(`${baseUrl}/api/tickets`);
     return res.json();
 }
+
+//ticket details page api
+export const getTicketById = async (_id) => {
+    const res = await fetch(`${baseUrl}/api/tickets/${_id}`);
+    return res.json();
+}
