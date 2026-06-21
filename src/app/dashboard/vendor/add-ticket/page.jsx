@@ -5,6 +5,7 @@ import { useSession } from '@/lib/auth-client';
 import { Upload, Calendar, MapPin, Users, Tag, Award } from 'lucide-react';
 
 import { TextField,Input, Label, Select,ListBox, CheckboxGroup, Checkbox } from "@heroui/react";
+import { createTicket } from '@/lib/actions/addTicket';
 
 const AddTicketPage = () => {
 
@@ -71,15 +72,9 @@ const AddTicketPage = () => {
         vendorName: session.user.name,
         vendorEmail: session.user.email,
         status: 'pending',
-      };
+      };  
 
-      console.log(payload)
-      
-      const res = await fetch('/api/tickets', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+     const res = await createTicket(payload)
 
       const data = await res.json();
       console.log(data)
