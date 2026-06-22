@@ -2,6 +2,7 @@
 
 import { getRequestBooking } from '@/lib/api/ticket';
 import { useSession } from '@/lib/auth-client';
+import { Button } from '@heroui/react';
 import React, { useEffect, useState } from 'react';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 
@@ -140,8 +141,6 @@ const BookingsPageVendor = () => {
             <tbody className="divide-y">
 
               {bookings.map((b) => {
-                const total = (b.quantity || 0) * (b.unitPrice || 0);
-
                 return (
                   <tr key={b._id} className="hover:bg-gray-50">
 
@@ -157,7 +156,7 @@ const BookingsPageVendor = () => {
 
                     {/* TICKET */}
                     <td className="px-6 py-4">
-                      {b.ticketTitle || 'No title'}
+                      {b.title || 'No title'}
                     </td>
 
                     {/* QTY */}
@@ -167,29 +166,27 @@ const BookingsPageVendor = () => {
 
                     {/* TOTAL */}
                     <td className="px-6 py-4 font-semibold text-green-600">
-                      ৳ {total}
+                      ৳ {b.totalPrice}
                     </td>
 
                     {/* ACTIONS */}
                     <td className="px-6 py-4">
-
                       <div className="flex gap-2">
-
-                        <button
+                        <Button
                           onClick={() => handleAccept(b._id)}
                           disabled={b.status !== 'pending'}
-                          className="px-3 py-1 text-xs bg-green-600 text-white rounded disabled:opacity-40"
+                          className="px-3 py-1 text-xs bg-green-600 text-white rounded disabled:opacity-40 flex items-center gap-2"
                         >
                           <FaCheck /> Accept
-                        </button>
+                        </Button>
 
-                        <button
+                        <Button
                           onClick={() => handleReject(b._id)}
                           disabled={b.status !== 'pending'}
-                          className="px-3 py-1 text-xs bg-red-600 text-white rounded disabled:opacity-40"
+                          className="px-3 py-1 text-xs bg-red-600 text-white rounded disabled:opacity-40 flex items-center gap-2"
                         >
                           <FaTimes /> Reject
-                        </button>
+                        </Button>
 
                       </div>
 
