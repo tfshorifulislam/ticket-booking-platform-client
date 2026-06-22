@@ -13,7 +13,10 @@ export function BookingTicketModal({
     title,
     image,
     status,
-    departure
+    departure,
+    to,
+    from,
+    vendorEmail
 }) {
     const [quantity, setQuantity] = useState('');
 
@@ -45,7 +48,10 @@ export function BookingTicketModal({
             title,
             image,
             status,
-            departure
+            departure,
+            to,
+            from,
+            vendorEmail
         };
 
         const res = await bookingTicket(bookingData);

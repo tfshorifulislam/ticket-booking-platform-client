@@ -32,3 +32,11 @@ export const getUserAddedTicket = async (email) => {
 
   return data;
 };
+
+
+//vendor dashboard request booking api
+export const getRequestBooking = async (vendorEmail) => {
+    const res = await fetch(`${baseUrl}/api/request-booking-tickets?vendorEmail=${vendorEmail}`);
+    const data = await res.json();
+    return data;
+}

@@ -170,6 +170,9 @@ const TicketDetailsPage = () => {
               image={ticket.image}
               status={ticket.status}
               departure={ticket.dateTime}
+              from={ticket.from}
+              to={ticket.to}
+              vendorEmail={ticket.vendorEmail}
             />
           </div>
 

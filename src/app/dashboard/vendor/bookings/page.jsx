@@ -1,5 +1,7 @@
 'use client';
 
+import { getRequestBooking } from '@/lib/api/ticket';
+import { useSession } from '@/lib/auth-client';
 import React, { useEffect, useState } from 'react';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 
@@ -8,21 +10,14 @@ const BookingsPageVendor = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const {data:session , isPending } = useSession()
   // ================= FETCH =================
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         setLoading(true);
 
-        const res = await fetch('http://localhost:5000/api/vendor-bookings');
-
-        if (!res.ok) {
-          throw new Error('Failed to fetch bookings');
-        }
-
-        const data = await res.json();
-
-        console.log('BOOKINGS FROM API:', data); // 🔥 DEBUG
+        const data = await getRequestBooking(session?.user?.email);
 
         setBookings(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -33,35 +28,37 @@ const BookingsPageVendor = () => {
       }
     };
 
-    fetchBookings();
-  }, []);
+    if (session?.user?.email) {
+      fetchBookings();
+    }
+  }, [session]);
 
   // ================= ACCEPT =================
- const handleAccept = async (id) => {
-  try {
-    const res = await fetch(`http://localhost:5000/api/vendor-booking/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: 'accepted' }),
-    });
+  const handleAccept = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/vendor-booking/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'accepted' }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    console.log('PATCH RESPONSE:', data);
+      console.log('PATCH RESPONSE:', data);
 
-    if (data.success || data.modifiedCount || data.acknowledged) {
-      setBookings(prev =>
-        prev.map(b =>
-          (b._id === id || b.id === id)
-            ? { ...b, status: 'accepted' }
-            : b
-        )
-      );
+      if (data.success || data.modifiedCount || data.acknowledged) {
+        setBookings(prev =>
+          prev.map(b =>
+            (b._id === id || b.id === id)
+              ? { ...b, status: 'accepted' }
+              : b
+          )
+        );
+      }
+    } catch (err) {
+      console.error(err);
     }
-  } catch (err) {
-    console.error(err);
-  }
-};
+  };
   // ================= REJECT =================
   const handleReject = async (id) => {
     try {
