@@ -63,3 +63,15 @@ export const bookingAccept = async (id) => {
     })
     return res.json();
 }
+
+// booking requst reject api
+export const bookingReject = async (id) => {
+    const res = await fetch(`${baseUrl}/bookings/reject/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    return res.json();
+};
