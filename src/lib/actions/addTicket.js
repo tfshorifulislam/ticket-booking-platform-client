@@ -52,3 +52,14 @@ export const bookingTicket = async (ticketBooking) => {
     })
     return res.json();
 }
+
+// booking request accept api
+export const bookingAccept = async (id) => {
+    const res = await fetch(`${baseUrl}/bookings/accept/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    return res.json();
+}

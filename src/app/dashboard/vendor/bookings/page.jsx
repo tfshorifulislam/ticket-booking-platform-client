@@ -1,8 +1,9 @@
 'use client';
 
+import { bookingAccept } from '@/lib/actions/addTicket';
 import { getRequestBooking } from '@/lib/api/ticket';
 import { useSession } from '@/lib/auth-client';
-import { Check, X, Calendar, User, Mail, Ticket, CreditCard, Inbox } from 'lucide-react';
+import { Check, X, User, Mail, Ticket, CreditCard, Inbox } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 
@@ -40,6 +41,10 @@ const BookingsPageVendor = () => {
   }, [session]);
 
 
+  const handleAccept = async (id) => {
+    const accept = await bookingAccept(id)
+    console.log(accept)
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 min-h-screen bg-gray-50/50">
