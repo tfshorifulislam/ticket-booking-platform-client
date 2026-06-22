@@ -9,7 +9,6 @@ import { FaCheck, FaTimes } from 'react-icons/fa';
 const BookingsPageVendor = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
   const { data: session, isPending } = useSession()
   // ================= FETCH =================
@@ -40,76 +39,8 @@ const BookingsPageVendor = () => {
     }
   }, [session]);
 
-  // ================= ACCEPT =================
-  const handleAccept = async (id) => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/vendor-booking/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'accepted' }),
-      });
-
-      const data = await res.json();
-
-      console.log('PATCH RESPONSE:', data);
-
-      if (data.success || data.modifiedCount || data.acknowledged) {
-        setBookings(prev =>
-          prev.map(b =>
-            (b._id === id || b.id === id)
-              ? { ...b, status: 'accepted' }
-              : b
-          )
-        );
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  // ================= REJECT =================
-  const handleReject = async (id) => {
-    try {
-      const res = await fetch(
-        `http://localhost:5000/api/vendor-booking/${id}`,
-        {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: 'rejected' }),
-        }
-      );
-
-      const data = await res.json();
-
-      if (data.modifiedCount > 0) {
-        setBookings((prev) =>
-          prev.map((b) =>
-            b._id === id ? { ...b, status: 'rejected' } : b
-          )
-        );
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // ================= LOADING =================
-  if (loading) {
-    return (
-      <div className="text-center py-10 text-gray-500">
-        Loading bookings...
-      </div>
-    );
-  }
-
-  // ================= ERROR =================
-  if (error) {
-    return (
-      <div className="text-center py-10 text-red-500">
-        {error}
-      </div>
-    );
-  }
-
+ 
+  
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
 

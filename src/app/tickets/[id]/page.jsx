@@ -11,6 +11,7 @@ const TicketDetailsPage = () => {
 
   const { data: session } = useSession()
   const userEmail = session?.user?.email;
+  const userName = session?.user?.name
 
   const [ticket, setTicket] = useState(null);
   const [countdown, setCountdown] = useState('');
@@ -173,6 +174,7 @@ const TicketDetailsPage = () => {
               from={ticket.from}
               to={ticket.to}
               vendorEmail={ticket.vendorEmail}
+              userName={userName}
             />
           </div>
 
