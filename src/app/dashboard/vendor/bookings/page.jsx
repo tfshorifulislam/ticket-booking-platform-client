@@ -10,14 +10,18 @@ const BookingsPageVendor = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const {data:session , isPending } = useSession()
+  const { data: session, isPending } = useSession()
   // ================= FETCH =================
   useEffect(() => {
+    console.log("Email:", session?.user?.email);
+
     const fetchBookings = async () => {
       try {
         setLoading(true);
 
         const data = await getRequestBooking(session?.user?.email);
+
+        console.log("Bookings:", data);
 
         setBookings(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -30,6 +34,8 @@ const BookingsPageVendor = () => {
 
     if (session?.user?.email) {
       fetchBookings();
+    } else {
+      setLoading(false);
     }
   }, [session]);
 
