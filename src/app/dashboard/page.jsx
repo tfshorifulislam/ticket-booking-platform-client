@@ -12,7 +12,7 @@ const Dashboard = () => {
   return (
     <div className="space-y-8 p-6">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-2xl p-8">
+      <div className="bg-green-600 text-white rounded-2xl p-8">
         <h1 className="text-3xl font-bold mb-3">
           Welcome to Ticket Booking Platform
         </h1>
