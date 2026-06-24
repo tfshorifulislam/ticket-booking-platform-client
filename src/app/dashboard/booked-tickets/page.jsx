@@ -172,9 +172,9 @@ const BookedTickets = () => {
                   <p className="text-sm font-medium">
                     {departureDate
                       ? departureDate.toLocaleString('en-US', {
-                          dateStyle: 'medium',
-                          timeStyle: 'short',
-                        })
+                        dateStyle: 'medium',
+                        timeStyle: 'short',
+                      })
                       : 'N/A'}
                   </p>
                 </div>
@@ -213,16 +213,13 @@ const BookedTickets = () => {
 
                 {/* ACTIONS */}
                 {ticket.status === 'accepted' && (
-                  <button
-                    onClick={() =>
-                      alert(
-                        `Proceeding payment: ৳ ${totalPrice}`
-                      )
-                    }
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-2xl font-semibold transition"
-                  >
-                    Pay Now - ৳ {totalPrice}
-                  </button>
+                  <form action="/api/checkout_sessions" method="POST">
+                    <section>
+                      <button type="submit" role="link" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-2xl font-semibold transition">
+                        Pay Now - ৳ {totalPrice}
+                      </button>
+                    </section>
+                  </form>
                 )}
 
                 {ticket.status === 'paid' && (
