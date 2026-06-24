@@ -4,10 +4,13 @@ import { bookingAccept, bookingReject } from '@/lib/actions/addTicket';
 import { getRequestBooking } from '@/lib/api/ticket';
 import { useSession } from '@/lib/auth-client';
 import { Check, X, User, Mail, Ticket, CreditCard, Inbox } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 
 const BookingsPageVendor = () => {
+  const router = useRouter()
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,21 +47,26 @@ const BookingsPageVendor = () => {
   const handleAccept = async (id) => {
     const accept = await bookingAccept(id)
     console.log(accept)
+    router.push('/dashboard/vendor/bookings')
+    toast.success('ticket accepted')
+
   }
 
   const handleReject = async (id) => {
     const result = await bookingReject(id);
 
     if (result.success) {
-        setBookings((prev) =>
-            prev.map((item) =>
-                item._id === id
-                    ? { ...item, status: "rejected" }
-                    : item
-            )
-        );
+      setBookings((prev) =>
+        prev.map((item) =>
+          item._id === id
+            ? { ...item, status: "rejected" }
+            : item
+        )
+      );
+      
     }
-};
+      toast.warn('ticket rejected')
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 min-h-screen bg-gray-50/50">

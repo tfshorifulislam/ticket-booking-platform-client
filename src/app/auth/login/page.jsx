@@ -4,6 +4,7 @@ import { signIn } from '@/lib/auth-client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({
@@ -36,7 +37,7 @@ const LoginPage = () => {
         }
         if (data) {
             console.log("Signup successful:", data);
-            alert("Signup successful! Please check your email to verify your account.");
+            toast.success("Signup successful! Please check your email to verify your account.");
             router.push("/");
             router.refresh();
         }

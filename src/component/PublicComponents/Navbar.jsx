@@ -10,11 +10,7 @@ const PublicNavbar = () => {
     const [dropdown, setDropdown] = useState(false);
     const [mobileMenu, setMobileMenu] = useState(false);
 
-    const { data: session, isPending } = useSession();
-
-    if (isPending) {
-        return <div>Loading...</div>;
-    }
+    const { data: session } = useSession();
 
     const user = session?.user;
     const isLoggedIn = !!user;
@@ -40,7 +36,7 @@ const PublicNavbar = () => {
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-2">
                             <FaBus className="text-2xl text-green-600" />
-                            <h1 className="text-xl font-bold">TicketBari</h1>
+                            <h1 className="text-xl font-bold">TicketVally</h1>
                         </Link>
 
                         {/* Desktop Menu */}
@@ -87,10 +83,6 @@ const PublicNavbar = () => {
                                             />
 
                                             <div className="absolute right-0 mt-3 w-48 bg-white border rounded-xl shadow-lg overflow-hidden">
-                                                <Link href="/profile" className="block px-4 py-3 hover:bg-gray-100">
-                                                    My Profile
-                                                </Link>
-
                                                 <button
                                                     onClick={handleSignOut}
                                                     className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50"
