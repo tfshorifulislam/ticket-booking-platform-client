@@ -1,5 +1,7 @@
 'use client';
 
+import { advertisement } from '@/lib/actions/addTicket';
+import { getAllTickets } from '@/lib/api/ticket';
 import React, { useEffect, useState } from 'react';
 import {
   FaToggleOn,
@@ -15,16 +17,10 @@ const AdvertiseTicketsPage = () => {
   const [updatingId, setUpdatingId] = useState(null);
 
   // ================= FETCH =================
-
   const fetchTickets = async () => {
     try {
       setLoading(true);
-
-      const res = await fetch(
-        'http://localhost:5000/api/approved-tickets'
-      );
-
-      const data = await res.json();
+      const data = await getAllTickets();
 
       setTickets(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -46,50 +42,45 @@ const AdvertiseTicketsPage = () => {
 
   // ================= TOGGLE =================
 
-  const handleToggle = async (ticket) => {
-    try {
-      if (!ticket.advertised && advertisedCount >= 6) {
-        toast.error('Maximum 6 advertised tickets allowed');
-        return;
-      }
+ const handleToggle = async (ticket) => {
+  try {
+    if (!ticket.advertised && advertisedCount >= 6) {
+      toast.error('Maximum 6 advertised tickets allowed');
+      return;
+    }
 
-      else {
-        setUpdatingId(ticket._id);
-      }
+    setUpdatingId(ticket._id);
 
-      const res = await fetch(
-        `http://localhost:5000/api/advertise-ticket/${ticket._id}`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            advertised: !ticket.advertised,
-          }),
-        }
-      );
+    const data = await advertisement(
+      ticket._id,
+      !ticket.advertised
+    );
 
-      const data = await res.json();
-
-      if (data.modifiedCount > 0 || data.success) {
-        setTickets((prev) =>
-          prev.map((t) =>
-            t._id === ticket._id
-              ? {
+    if (data.success || data.modifiedCount > 0) {
+      setTickets((prev) =>
+        prev.map((t) =>
+          t._id === ticket._id
+            ? {
                 ...t,
                 advertised: !t.advertised,
               }
-              : t
-          )
-        );
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setUpdatingId(null);
+            : t
+        )
+      );
+
+      toast.success(
+        !ticket.advertised
+          ? 'Ticket advertised successfully'
+          : 'Ticket unadvertised successfully'
+      );
     }
-  };
+  } catch (error) {
+    console.error(error);
+    toast.error('Failed to update advertisement');
+  } finally {
+    setUpdatingId(null);
+  }
+};
 
   // ================= LOADING =================
 
