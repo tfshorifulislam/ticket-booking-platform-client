@@ -40,3 +40,11 @@ export const getRequestBooking = async (vendorEmail) => {
     const data = await res.json();
     return data;
 }
+
+
+//pending ticket get for accept or reject by admin api
+export const getPendingTicket = async () => {
+    const res = await fetch(`${baseUrl}/api/get-all-tickets`);
+    const data = await res.json();
+    return data;
+}
