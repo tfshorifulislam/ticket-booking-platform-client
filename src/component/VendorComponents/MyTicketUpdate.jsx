@@ -147,6 +147,7 @@ export function MyTicketUpdate({ _id,
 
                                     <Modal.Footer>
                                         <Button
+                                        slot='close'
                                             className="bg-blue-600 text-white"
                                             onClick={handleUpdate}
                                         >
