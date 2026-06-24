@@ -13,7 +13,11 @@ export const auth = betterAuth({
         additionalFields: {
             role: {
                 default: 'user'
-            }
+            },
+            isFraud: {
+                type: "boolean",
+                default: false,
+            },
         }
     },
     database: mongodbAdapter(db, {

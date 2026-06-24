@@ -11,6 +11,10 @@ import { toast } from 'react-toastify';
 const AddTicketPage = () => {
 
   const { data: session } = useSession();
+  const isFraud = session?.user?.isFraud
+  console.log(isFraud, session)
+
+
 
   // Form State
   const [form, setForm] = useState({
@@ -70,8 +74,8 @@ const AddTicketPage = () => {
         dateTime: form.dateTime,
         perks: form.perks,
         image: imageUrl,
-        vendorName: session.user.name,
-        vendorEmail: session.user.email,
+        vendorName: session?.user?.name,
+        vendorEmail: session?.user?.email,
         status: 'pending',
       };
 
@@ -80,9 +84,6 @@ const AddTicketPage = () => {
         toast.success('Ticket add successfull');
         e.target.reset();
       }
-
-      const data = await res.json();
-      console.log(data)
 
       if (res.ok && data.success) {
         setMessage({ type: 'success', text: 'Ticket added successfully!' });
@@ -311,14 +312,23 @@ const AddTicketPage = () => {
                 {message.text}
               </div>
             )}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white font-semibold py-4 rounded-2xl text-lg transition"
-            >
-              {isSubmitting ? 'Adding Ticket...' : 'Add Ticket'}
-            </button>
+            {session?.user?.isFraud ? (
+              <button
+                type="button"
+                disabled
+                className="w-full bg-red-400 cursor-not-allowed text-white font-semibold py-4 rounded-2xl text-lg"
+              >
+                Fraud Vendor - Access Blocked
+              </button>
+            ) : (
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white font-semibold py-4 rounded-2xl text-lg transition"
+              >
+                {isSubmitting ? 'Adding Ticket...' : 'Add Ticket'}
+              </button>
+            )}
           </div>
         </form>
 

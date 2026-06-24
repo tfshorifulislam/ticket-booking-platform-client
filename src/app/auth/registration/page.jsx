@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 const RegistrationPage = () => {
     const router = useRouter()
     const [role, setRole] = useState("user");
+    const [isFraud, setIsFraud] = useState(false);
 
     const handleSingUp = async (e) => {
         e.preventDefault();
@@ -23,6 +24,7 @@ const RegistrationPage = () => {
             password: userData.password,
             name: userData.name,
             role,
+            isFraud
         })
 
         if (error) {
