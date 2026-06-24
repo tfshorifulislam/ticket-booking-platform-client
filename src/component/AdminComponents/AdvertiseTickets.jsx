@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FaBus, FaTag, FaArrowRight } from 'react-icons/fa';
+import { getAllAdvertismentTickets } from '@/lib/api/ticket';
 
 const AdvertiseTickets = () => {
   const [tickets, setTickets] = useState([]);
@@ -11,8 +12,7 @@ const AdvertiseTickets = () => {
   useEffect(() => {
     const fetchAdvertisedTickets = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/advertised-tickets');
-        const data = await res.json();
+        const data = await getAllAdvertismentTickets();
         setTickets(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error(error);

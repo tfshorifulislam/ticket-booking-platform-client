@@ -12,6 +12,11 @@ export const getAllTickets = async () => {
     const res = await fetch(`${baseUrl}/api/tickets`);
     return res.json();
 }
+//get all tickets advertisment
+export const getAllAdvertismentTickets = async () => {
+    const res = await fetch(`${baseUrl}/api/advertise/tickets`);
+    return res.json();
+}
 
 //ticket details page api
 export const getTicketById = async (_id) => {
