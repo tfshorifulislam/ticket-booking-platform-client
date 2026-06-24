@@ -65,12 +65,7 @@ const RegistrationPage = () => {
                             placeholder="Enter your name"
                             className="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                             required
-                            validate={(value) => {
-                                if (value.length < 2) {
-                                    return "Name must be at least 2 characters";
-                                }
-                                return null;
-                            }}
+                            minLength={2}
                         />
                     </div>
 
@@ -82,14 +77,6 @@ const RegistrationPage = () => {
                         <input
                             type="email"
                             name="email"
-                            validate={(value) => {
-                                if (
-                                    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)
-                                ) {
-                                    return "Please enter a valid email address";
-                                }
-                                return null;
-                            }}
                             placeholder="Enter your email"
                             className="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                             required
@@ -131,27 +118,12 @@ const RegistrationPage = () => {
                             Password
                         </label>
                         <input
-                            minLength={8}
-                            name="password"
                             type="password"
-                            validate={(value) => {
-                                if (value.length < 8) {
-                                    return "Password must be at least 8 characters";
-                                }
-
-                                if (!/[A-Z]/.test(value)) {
-                                    return "Password must contain at least one uppercase letter";
-                                }
-
-                                if (!/[0-9]/.test(value)) {
-                                    return "Password must contain at least one number";
-                                }
-
-                                return null;
-                            }}
+                            name="password"
                             placeholder="Enter your password"
                             className="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
                             required
+                            minLength={8}
                         />
                     </div>
 
