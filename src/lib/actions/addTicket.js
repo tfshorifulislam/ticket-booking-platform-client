@@ -90,3 +90,18 @@ export const updateStatusByAdmin = async (id, status) => {
 
     return res.json();
 };
+
+export const updateUserRoleByAdmin = async (is, role) => {
+    const res = await fetch(
+        `${baseUrl}/api/ticket-status/${id}`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ role }),
+        }
+    );
+
+    return res.json();
+};

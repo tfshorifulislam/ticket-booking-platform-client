@@ -21,16 +21,16 @@ export const getTicketById = async (_id) => {
 
 //get ticket in added my ticket page
 export const getUserAddedTicket = async (email) => {
-  console.log("SENDING EMAIL:", email);
+    console.log("SENDING EMAIL:", email);
 
-  const res = await fetch(
-    `${baseUrl}/api/my-booked-tickets?email=${email}`
-  );
+    const res = await fetch(
+        `${baseUrl}/api/my-booked-tickets?email=${email}`
+    );
 
-  const data = await res.json();
-  console.log("API RESPONSE:", data);
+    const data = await res.json();
+    console.log("API RESPONSE:", data);
 
-  return data;
+    return data;
 };
 
 
@@ -48,3 +48,45 @@ export const getPendingTicket = async () => {
     const data = await res.json();
     return data;
 }
+
+// Get All Users
+export const allUser = async () => {
+    const res = await fetch(`${baseUrl}/all-user`);
+    return res.json();
+};
+
+// Make Admin
+export const makeAdmin = async (id) => {
+    const res = await fetch(
+        `${baseUrl}/api/users/make-admin/${id}`,
+        {
+            method: 'PATCH',
+        }
+    );
+
+    return res.json();
+};
+
+// Make Vendor
+export const makeVendor = async (id) => {
+    const res = await fetch(
+        `${baseUrl}/api/users/make-vendor/${id}`,
+        {
+            method: 'PATCH',
+        }
+    );
+
+    return res.json();
+};
+
+// Mark Fraud
+export const markFraudVendor = async (id) => {
+    const res = await fetch(
+        `${baseUrl}/api/users/fraud/${id}`,
+        {
+            method: 'PATCH',
+        }
+    );
+
+    return res.json();
+};
