@@ -3,6 +3,7 @@ import { MyTicketUpdate } from "@/component/VendorComponents/MyTicketUpdate";
 import { getVendorTickets } from "@/lib/api/ticket";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import Link from "next/link";
 import { FaCheckCircle, FaClock, FaTimesCircle } from "react-icons/fa";
 
 const statusStyle = {
@@ -126,12 +127,12 @@ const MyTicketPage = async () => {
           /* Empty State (if no tickets) */
           <div className="text-center py-20 bg-white rounded-3xl shadow border border-gray-100">
             <p className="text-gray-500 text-lg">You have no tickets yet.</p>
-            <a
+            <Link
               href="/dashboard/vendor/add-ticket"
               className="inline-block mt-6 bg-emerald-600 text-white px-8 py-3 rounded-2xl font-medium hover:bg-emerald-700"
             >
               Add Your First Ticket
-            </a>
+            </Link>
           </div>
         )}
 
