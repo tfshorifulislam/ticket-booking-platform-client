@@ -25,7 +25,8 @@ const MyTicketPage = async () => {
   const userEmail = session?.user?.email;
 
   // Fetches tickets for the current vendor
-  const vendorTicket = await getVendorTickets(userEmail, "pending");
+  const vendorTicket = await getVendorTickets(userEmail);
+  console.log(vendorTicket)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50 pb-12">

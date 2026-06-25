@@ -11,9 +11,6 @@ import { toast } from 'react-toastify';
 const AddTicketPage = () => {
 
   const { data: session } = useSession();
-  const isFraud = session?.user?.isFraud
-  console.log(isFraud, session)
-
 
 
   // Form State
@@ -79,16 +76,16 @@ const AddTicketPage = () => {
         status: 'pending',
       };
 
-      const res = await createTicket(payload)
-      if (res.insertedId) {
-        toast.success('Ticket add successfull');
-        e.target.reset();
-      }
+      const data = await createTicket(payload);
 
-      if (res.ok && data.success) {
-        setMessage({ type: 'success', text: 'Ticket added successfully!' });
+      if (data.insertedId) {
+        toast.success('Ticket added successfully');
 
-        // Reset form
+        setMessage({
+          type: 'success',
+          text: 'Ticket added successfully!',
+        });
+
         setForm({
           title: '',
           from: '',
@@ -100,8 +97,15 @@ const AddTicketPage = () => {
           perks: [],
           image: null,
         });
+
+        e.target.reset();
       } else {
-        setMessage({ type: 'error', text: 'Failed to add ticket' });
+        toast.error('Failed to add ticket');
+
+        setMessage({
+          type: 'error',
+          text: 'Failed to add ticket',
+        });
       }
     } catch (error) {
       console.error(error);
