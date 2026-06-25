@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fa';
 import { FilterBox } from '@/component/PublicComponents/FilterBox';
 import { getAllTickets } from '@/lib/api/ticket';
+import Loading from '../loading';
 
 const ITEMS_PER_PAGE = 12;
 
@@ -82,9 +83,7 @@ const AllTickets = () => {
 
     if (loading) {
         return (
-            <div className="w-11/12 max-w-7xl mx-auto py-10">
-                <p className="text-gray-500">Loading tickets...</p>
-            </div>
+            <Loading/>
         );
     }
 
