@@ -1,5 +1,7 @@
 'use client';
 
+import { useSession } from '@/lib/auth-client';
+import { redirect } from 'next/navigation';
 import React from 'react';
 
 const dummyTransactions = [
@@ -24,6 +26,12 @@ const dummyTransactions = [
 ];
 
 const TransactionsPage = () => {
+  const { data: session } = useSession()
+
+  if (!session) {
+    redirect('/auth/login')
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 

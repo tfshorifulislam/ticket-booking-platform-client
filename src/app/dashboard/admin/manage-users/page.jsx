@@ -14,8 +14,17 @@ import {
   makeVendor,
   markFraudVendor,
 } from '@/lib/api/ticket';
+import { useSession } from '@/lib/auth-client';
+import { redirect } from 'next/navigation';
 
 const ManageUsers = () => {
+
+  const { data: session } = useSession()
+
+  if (!session) {
+    redirect('/auth/login')
+  }
+
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,10 +54,10 @@ const ManageUsers = () => {
           prev.map((user) =>
             user._id === id
               ? {
-                  ...user,
-                  role: 'admin',
-                  isFraud: false,
-                }
+                ...user,
+                role: 'admin',
+                isFraud: false,
+              }
               : user
           )
         );
@@ -68,10 +77,10 @@ const ManageUsers = () => {
           prev.map((user) =>
             user._id === id
               ? {
-                  ...user,
-                  role: 'vendor',
-                  isFraud: false,
-                }
+                ...user,
+                role: 'vendor',
+                isFraud: false,
+              }
               : user
           )
         );
@@ -91,9 +100,9 @@ const ManageUsers = () => {
           prev.map((user) =>
             user._id === id
               ? {
-                  ...user,
-                  isFraud: true,
-                }
+                ...user,
+                isFraud: true,
+              }
               : user
           )
         );
@@ -143,11 +152,10 @@ const ManageUsers = () => {
                 return (
                   <tr
                     key={user._id}
-                    className={`hover:bg-green-50 transition ${
-                      isFraud
+                    className={`hover:bg-green-50 transition ${isFraud
                         ? 'bg-red-50/40 opacity-75'
                         : ''
-                    }`}
+                      }`}
                   >
                     <td className="px-6 py-5 font-medium">
                       {user.name}
@@ -159,13 +167,12 @@ const ManageUsers = () => {
 
                     <td className="px-6 py-5">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${
-                          user.role === 'admin'
+                        className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${user.role === 'admin'
                             ? 'bg-indigo-100 text-indigo-700'
                             : user.role === 'vendor'
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-gray-100 text-gray-700'
-                        }`}
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-gray-100 text-gray-700'
+                          }`}
                       >
                         {user.role || 'user'}
                       </span>

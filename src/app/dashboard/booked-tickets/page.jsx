@@ -8,6 +8,7 @@ import {
   FaClock,
 } from 'react-icons/fa';
 import Countdown from 'react-countdown';
+import { redirect } from 'next/navigation';
 
 const statusStyle = {
   pending: 'bg-amber-100 text-amber-700 border border-amber-200',
@@ -22,6 +23,10 @@ const BookedTickets = () => {
 
   const { data: session, isPending } = useSession();
   const userEmail = session?.user?.email;
+  
+    if (!session) {
+      redirect('/auth/login')
+    }
 
   useEffect(() => {
     if (isPending) return;

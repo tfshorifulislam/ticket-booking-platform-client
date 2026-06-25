@@ -2,10 +2,15 @@
 
 import { useSession } from '@/lib/auth-client';
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
 import React from 'react';
 
 const VendorProfile = () => {
   const { data: session, isPending } = useSession();
+
+    if (!session) {
+      redirect('/auth/login')
+    }
 
   if (isPending) {
     return (

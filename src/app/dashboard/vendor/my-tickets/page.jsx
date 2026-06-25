@@ -4,6 +4,7 @@ import { getVendorTickets } from "@/lib/api/ticket";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { FaCheckCircle, FaClock, FaTimesCircle } from "react-icons/fa";
 
 const statusStyle = {
@@ -22,6 +23,10 @@ const MyTicketPage = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+  
+    if (!session) {
+      redirect('/auth/login')
+    }
 
   const userEmail = session?.user?.email;
 

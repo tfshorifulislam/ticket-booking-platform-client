@@ -2,6 +2,7 @@
 
 import { useSession } from '@/lib/auth-client';
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
 import React from 'react';
 
 const AdminProfile = () => {
@@ -16,6 +17,10 @@ const AdminProfile = () => {
   }
 
   const user = session?.user;
+   
+    if (!user) {
+      redirect('/auth/login')
+    }
 
   return (
     <div className="max-w-4xl mx-auto">

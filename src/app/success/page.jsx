@@ -1,9 +1,17 @@
 'use client';
 
+import { useSession } from '@/lib/auth-client';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { FaCheckCircle, FaTicketAlt } from 'react-icons/fa';
 
 const SuccessPage = () => {
+    const { data: session } = useSession()
+
+    if (!session) {
+        redirect('/auth/login')
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-100 flex items-center justify-center px-4">
 

@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import {
   Users,
@@ -7,8 +8,18 @@ import {
   Clock,
   Star,
 } from 'lucide-react';
+import { useSession } from '@/lib/auth-client';
+import { redirect } from 'next/navigation';
 
 const Dashboard = () => {
+
+  const { data: session } = useSession()
+  
+    if(!session){
+      redirect('/auth/login')
+    }
+  
+
   return (
     <div className="space-y-8 p-6">
       {/* Welcome Section */}

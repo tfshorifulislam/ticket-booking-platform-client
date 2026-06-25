@@ -4,7 +4,7 @@ import { bookingAccept, bookingReject } from '@/lib/actions/addTicket';
 import { getRequestBooking } from '@/lib/api/ticket';
 import { useSession } from '@/lib/auth-client';
 import { Check, X, User, Mail, Ticket, CreditCard, Inbox } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -15,6 +15,11 @@ const BookingsPageVendor = () => {
   const [loading, setLoading] = useState(true);
 
   const { data: session, isPending } = useSession()
+
+  
+    if (!session) {
+      redirect('/auth/login')
+    }
   // ================= FETCH =================
   useEffect(() => {
     console.log("Email:", session?.user?.email);

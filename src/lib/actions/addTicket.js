@@ -9,10 +9,6 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
         headers: await headers()
     });
 
-
-
-
-
 export const createTicket = async (newTicket) => {
     const res = await fetch(`${baseUrl}/api/add-ticket`, {
         method: 'POST',

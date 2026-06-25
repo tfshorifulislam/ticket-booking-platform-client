@@ -3,6 +3,8 @@
 
 import { updateStatusByAdmin } from '@/lib/actions/addTicket';
 import { getPendingTicket } from '@/lib/api/ticket';
+import { useSession } from '@/lib/auth-client';
+import { redirect } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
@@ -14,6 +16,13 @@ const statusStyle = {
 };
 
 export default function ManageTicket() {
+
+   const { data: session } = useSession()
+  
+    if (!session) {
+      redirect('/auth/login')
+    }
+
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoadingId, setActionLoadingId] = useState(null);

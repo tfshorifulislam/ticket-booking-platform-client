@@ -2,6 +2,8 @@
 
 import { advertisement } from '@/lib/actions/addTicket';
 import { getAllTickets } from '@/lib/api/ticket';
+import { useSession } from '@/lib/auth-client';
+import { redirect } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import {
   FaToggleOn,
@@ -12,6 +14,13 @@ import {
 import { toast } from 'react-toastify';
 
 const AdvertiseTicketsPage = () => {
+
+   const { data: session } = useSession()
+  
+    if (!session) {
+      redirect('/auth/login')
+    }
+
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
