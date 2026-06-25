@@ -53,12 +53,13 @@ const AllTickets = () => {
                 ticket.to?.toLowerCase().includes(q);
 
             const matchFilter =
-                filter === 'all' || ticket.transport === filter;
+                filter === 'all' ||
+                ticket.type?.toLowerCase() === filter.toLowerCase();
 
             return matchSearch && matchFilter;
         });
     }, [searchQuery, filter, tickets]);
-
+    
     useEffect(() => {
         setCurrentPage(1);
     }, [searchQuery, filter]);
@@ -83,7 +84,7 @@ const AllTickets = () => {
 
     if (loading) {
         return (
-            <Loading/>
+            <Loading />
         );
     }
 
