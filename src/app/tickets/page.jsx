@@ -3,12 +3,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
+    Select,
+    SelectItem,
+} from "@heroui/react";
+
+import {
     FaBus,
     FaSearch,
     FaMapMarkerAlt,
     FaCalendarAlt,
     FaClock,
     FaTag,
+    FaSortAmountDown,
 } from 'react-icons/fa';
 import { FilterBox } from '@/component/PublicComponents/FilterBox';
 import { getAllTickets } from '@/lib/api/ticket';
@@ -21,6 +27,7 @@ const AllTickets = () => {
     const [searchInput, setSearchInput] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [filter, setFilter] = useState('all');
+    const [sortBy, setSortBy] = useState('default'); // New State: 'default', 'price-asc', 'price-desc'
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
 
@@ -29,9 +36,7 @@ const AllTickets = () => {
         const fetchTickets = async () => {
             try {
                 const data = await getAllTickets();
-
                 console.log(data); // check
-
                 setTickets(data || []);
             } catch (err) {
                 console.error(err);
@@ -42,9 +47,11 @@ const AllTickets = () => {
 
         fetchTickets();
     }, []);
-    // ================= FILTER =================
-    const filteredTickets = useMemo(() => {
-        return tickets.filter((ticket) => {
+
+    // ================= FILTER & SORT =================
+    const filteredAndSortedTickets = useMemo(() => {
+        // 1. Filter Tickets
+        const result = tickets.filter((ticket) => {
             const q = searchQuery.toLowerCase();
 
             const matchSearch =
@@ -58,18 +65,28 @@ const AllTickets = () => {
 
             return matchSearch && matchFilter;
         });
-    }, [searchQuery, filter, tickets]);
-    
+
+        // 2. Sort Tickets based on sortBy value
+        if (sortBy === 'price-asc') {
+            return [...result].sort((a, b) => Number(a.price) - Number(b.price));
+        }
+        if (sortBy === 'price-desc') {
+            return [...result].sort((a, b) => Number(b.price) - Number(a.price));
+        }
+
+        return result;
+    }, [searchQuery, filter, sortBy, tickets]);
+
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchQuery, filter]);
+    }, [searchQuery, filter, sortBy]);
 
-    const totalPages = Math.ceil(filteredTickets.length / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(filteredAndSortedTickets.length / ITEMS_PER_PAGE);
 
     const paginatedTickets = useMemo(() => {
         const start = (currentPage - 1) * ITEMS_PER_PAGE;
-        return filteredTickets.slice(start, start + ITEMS_PER_PAGE);
-    }, [filteredTickets, currentPage]);
+        return filteredAndSortedTickets.slice(start, start + ITEMS_PER_PAGE);
+    }, [filteredAndSortedTickets, currentPage]);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -80,12 +97,11 @@ const AllTickets = () => {
         setSearchInput('');
         setSearchQuery('');
         setFilter('all');
+        setSortBy('default'); // Reset sort configuration
     };
 
     if (loading) {
-        return (
-            <Loading />
-        );
+        return <Loading />;
     }
 
     return (
@@ -101,8 +117,8 @@ const AllTickets = () => {
                 </p>
             </div>
 
-            {/* SEARCH + FILTER */}
-            <div className="flex flex-col md:flex-row gap-4 mb-8">
+            {/* SEARCH + FILTER + SORT */}
+            <div className="flex flex-col lg:flex-row gap-4 mb-8">
 
                 <form
                     onSubmit={handleSearch}
@@ -117,21 +133,38 @@ const AllTickets = () => {
                         className="w-full px-3 outline-none"
                     />
 
-                    <button className="bg-green-600 text-white px-4 py-1.5 rounded-lg text-sm">
+                    <button className="bg-green-600 text-white px-4 py-1.5 rounded-lg text-sm whitespace-nowrap">
                         Search
                     </button>
 
                     <button
                         type="button"
                         onClick={handleClear}
-                        className="ml-2 bg-gray-200 px-3 py-1.5 rounded-lg text-sm"
+                        className="ml-2 bg-gray-200 px-3 py-1.5 rounded-lg text-sm whitespace-nowrap"
                     >
                         Clear
                     </button>
                 </form>
 
-                <div className="bg-white border rounded-xl px-3 py-2 shadow-sm w-full sm:w-72">
-                    <FilterBox value={filter} onChange={setFilter} />
+                {/* FILTER BOX AND SORT BAR WRAPPER */}
+                <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+                    {/* Transport Filter */}
+                    <div className="bg-white border rounded-xl px-3 py-2 shadow-sm w-full sm:w-60">
+                        <FilterBox value={filter} onChange={setFilter} />
+                    </div>
+
+                    {/* Price Sort Dropdown */}
+                    <div className="bg-white border rounded-xl px-3 py-2 shadow-sm w-full sm:w-60 flex items-center gap-2">
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value)}
+                            className="w-full h-12 px-4 rounded-xl border border-default-200 bg-background outline-none"
+                        >
+                            <option value="default">Featured</option>
+                            <option value="price-asc">Price: Low to High</option>
+                            <option value="price-desc">Price: High to Low</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -145,6 +178,7 @@ const AllTickets = () => {
                     >
                         <img
                             src={ticket.image}
+                            alt={ticket.title}
                             className="h-40 w-full object-cover"
                         />
 
@@ -161,7 +195,7 @@ const AllTickets = () => {
 
                             <p className="flex items-center gap-2 text-sm text-gray-500">
                                 <FaBus />
-                                {ticket.transport}
+                                {ticket.type || ticket.transport}
                             </p>
 
                             <div className="flex justify-between">
@@ -189,6 +223,7 @@ const AllTickets = () => {
                                 <FaCalendarAlt />
                                 {ticket.dateTime}
                                 <FaClock className="ml-2" />
+                                {ticket.time || ''}
                             </p>
 
                             <Link
@@ -209,20 +244,22 @@ const AllTickets = () => {
             )}
 
             {/* PAGINATION */}
-            <div className="flex justify-center gap-2 mt-10">
-                {Array.from({ length: totalPages }).map((_, i) => (
-                    <button
-                        key={i}
-                        onClick={() => setCurrentPage(i + 1)}
-                        className={`px-4 py-2 rounded-lg border ${currentPage === i + 1
-                            ? 'bg-green-600 text-white'
-                            : 'bg-white'
-                            }`}
-                    >
-                        {i + 1}
-                    </button>
-                ))}
-            </div>
+            {totalPages > 1 && (
+                <div className="flex justify-center gap-2 mt-10">
+                    {Array.from({ length: totalPages }).map((_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => setCurrentPage(i + 1)}
+                            className={`px-4 py-2 rounded-lg border ${currentPage === i + 1
+                                ? 'bg-green-600 text-white'
+                                : 'bg-white'
+                                }`}
+                        >
+                            {i + 1}
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
