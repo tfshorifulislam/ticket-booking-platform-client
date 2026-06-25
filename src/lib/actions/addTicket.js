@@ -1,11 +1,24 @@
 'use server'
 
+import { headers } from "next/headers";
+import { auth } from "../auth";
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+ const userToken = await auth.api.getToken({
+        headers: await headers()
+    });
+
+
+
+
+
 export const createTicket = async (newTicket) => {
     const res = await fetch(`${baseUrl}/api/add-ticket`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+             authorization: `Bearer ${userToken?.token}`
         },
         body: JSON.stringify(newTicket)
     })
@@ -21,6 +34,7 @@ export const ticketUpdate = async (updateTicket) => {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
+             authorization: `Bearer ${userToken?.token}`
         },
         body: JSON.stringify(updateTicket)
     })
@@ -33,6 +47,7 @@ export const deleteTicket = async (deleteTicket) => {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
+             authorization: `Bearer ${userToken?.token}`
         },
         body: JSON.stringify(deleteTicket)
     })
@@ -46,6 +61,7 @@ export const bookingTicket = async (ticketBooking) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+             authorization: `Bearer ${userToken?.token}`
         },
 
         body: JSON.stringify(ticketBooking)
@@ -59,6 +75,7 @@ export const bookingAccept = async (id) => {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+             authorization: `Bearer ${userToken?.token}`
         },
     })
     return res.json();
@@ -70,6 +87,7 @@ export const bookingReject = async (id) => {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
+             authorization: `Bearer ${userToken?.token}`
         },
     });
 
@@ -83,6 +101,7 @@ export const updateStatusByAdmin = async (id, status) => {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                 authorization: `Bearer ${userToken?.token}`
             },
             body: JSON.stringify({ status }),
         }
@@ -98,6 +117,7 @@ export const updateUserRoleByAdmin = async (is, role) => {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                 authorization: `Bearer ${userToken?.token}`
             },
             body: JSON.stringify({ role }),
         }
@@ -113,6 +133,7 @@ export const advertisement = async (id, advertised) => {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                 authorization: `Bearer ${userToken?.token}`
             },
             body: JSON.stringify({
                 advertised,

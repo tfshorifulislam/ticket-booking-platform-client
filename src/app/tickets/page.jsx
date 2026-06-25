@@ -20,7 +20,7 @@ import { FilterBox } from '@/component/PublicComponents/FilterBox';
 import { getAllTickets } from '@/lib/api/ticket';
 import Loading from '../loading';
 
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = 9;
 
 const AllTickets = () => {
     const [tickets, setTickets] = useState([]);
