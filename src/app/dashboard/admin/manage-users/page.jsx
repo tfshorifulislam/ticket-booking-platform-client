@@ -14,16 +14,8 @@ import {
   makeVendor,
   markFraudVendor,
 } from '@/lib/api/ticket';
-import { useSession } from '@/lib/auth-client';
-import { redirect } from 'next/navigation';
 
 const ManageUsers = () => {
-
-  const { data: session } = useSession()
-
-  if (!session) {
-    redirect('/auth/login')
-  }
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);

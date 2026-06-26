@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { FaBus, FaUserCircle, FaChevronDown } from 'react-icons/fa';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import NabarDrawer from './NabarDrawer';
+import ThemeToggle from './ToggleButton';
 
 const PublicNavbar = () => {
     const [dropdown, setDropdown] = useState(false);
@@ -29,7 +30,7 @@ const PublicNavbar = () => {
 
     return (
         <>
-            <nav className="sticky top-0 z-50 bg-white border-b shadow-sm">
+            <nav className="sticky top-0 z-50 bg-white dark:bg-[#1e1e1e] border-b shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 lg:px-8">
                     <div className="flex items-center justify-between h-16">
 
@@ -45,7 +46,7 @@ const PublicNavbar = () => {
                                 <Link
                                     key={item.name}
                                     href={item.href}
-                                    className="text-gray-700 hover:text-green-600 font-medium transition"
+                                    className="text-gray-700 dark:text-white hover:text-green-600 font-medium transition"
                                 >
                                     {item.name}
                                 </Link>
@@ -57,7 +58,7 @@ const PublicNavbar = () => {
 
                             {!isLoggedIn ? (
                                 <>
-                                    <Link href="/auth/login" className="text-gray-700 hover:text-green-600">
+                                    <Link href="/auth/login" className="text-gray-700 dark:text-white hover:text-green-600">
                                         Login
                                     </Link>
                                     <Link href="/auth/registration" className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
@@ -89,6 +90,7 @@ const PublicNavbar = () => {
                                                 >
                                                     Logout
                                                 </button>
+                                                <span><ThemeToggle /></span>
                                             </div>
                                         </>
                                     )}

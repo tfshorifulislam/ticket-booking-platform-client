@@ -3,6 +3,7 @@ import "./globals.css";
 import PublicFooter from "@/component/PublicComponents/PublicFooter";
 import PublicNavbar from "@/component/PublicComponents/Navbar";
 import { ToastContainer } from "react-toastify";
+import Providers from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,15 +23,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html
-      data-theme='light'
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <PublicNavbar />
-        {children}
-        <PublicFooter />
-        <ToastContainer />
+        <Providers>
+          <PublicNavbar />
+          {children}
+          <PublicFooter />
+          <ToastContainer />
+        </Providers>
       </body>
     </html>
   );
