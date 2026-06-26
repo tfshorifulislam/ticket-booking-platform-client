@@ -90,13 +90,16 @@ const PublicNavbar = () => {
                                                 >
                                                     Logout
                                                 </button>
-                                                <span><ThemeToggle /></span>
                                             </div>
                                         </>
                                     )}
                                 </div>
                             )}
+                        <div>
+                            <ThemeToggle />
                         </div>
+                        </div>
+
 
                         {/* Mobile Button */}
                         <button

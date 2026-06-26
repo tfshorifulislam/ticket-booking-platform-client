@@ -24,12 +24,12 @@ export default function ThemeToggle() {
       {isDark ? (
         <>
           <FaSun />
-          <span>Light Mode</span>
+         
         </>
       ) : (
         <>
           <FaMoon />
-          <span>Dark Mode</span>
+          
         </>
       )}
     </button>
