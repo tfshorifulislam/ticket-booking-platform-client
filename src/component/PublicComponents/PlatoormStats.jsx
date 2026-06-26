@@ -104,7 +104,7 @@ const PlatformStats = () => {
           </p>
 
         </div>
-
+ 
       </div>
 
     </div>

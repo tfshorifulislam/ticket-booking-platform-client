@@ -25,8 +25,6 @@ const TicketDetailsPage = () => {
         headers: {
           authorization: `Bearer ${userToken?.token}`
         },
-
-        cache: 'no-store'
       });
 
       const data = await res.json()
