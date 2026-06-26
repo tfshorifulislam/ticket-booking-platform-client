@@ -8,9 +8,6 @@ import React from 'react';
 const UserProfile = () => {
   const { data: session, isPending } = useSession();
   
-    if (!session) {
-      redirect('/auth/login')
-    }
 
   if (isPending) {
     return (
@@ -22,14 +19,16 @@ const UserProfile = () => {
 
   const user = session?.user;
 
-  return (
+ return (
+  <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-black py-10 px-4 transition-colors duration-300">
+
     <div className="max-w-4xl mx-auto">
 
       {/* Card */}
-      <div className="relative overflow-hidden rounded-2xl border border-green-100 bg-white shadow-sm">
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-xl">
 
-        {/* soft green glow background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-white to-emerald-50" />
+        {/* Background Glow */}
+        <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-green-900/10 dark:via-zinc-900 dark:to-black" />
 
         <div className="relative p-6 sm:p-10">
 
@@ -37,7 +36,7 @@ const UserProfile = () => {
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
 
             {/* Avatar */}
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border border-green-100 bg-white shadow-sm flex items-center justify-center">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 shadow-md flex items-center justify-center">
 
               {user?.image ? (
                 <Image
@@ -48,7 +47,7 @@ const UserProfile = () => {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="text-2xl font-semibold text-green-600">
+                <span className="text-3xl font-bold text-green-600 dark:text-green-400">
                   {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                 </span>
               )}
@@ -58,15 +57,15 @@ const UserProfile = () => {
             {/* Info */}
             <div className="text-center sm:text-left">
 
-              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
                 {user?.name || 'Anonymous User'}
               </h1>
 
-              <p className="text-sm text-gray-500 mt-1">
-                {user?.email}
+              <p className="text-sm text-slate-500 dark:text-zinc-400 mt-1 break-all">
+                {user?.email || '—'}
               </p>
 
-              <span className="inline-flex mt-3 px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100 capitalize">
+              <span className="inline-flex mt-3 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800 capitalize">
                 {user?.role || 'user'}
               </span>
 
@@ -75,43 +74,43 @@ const UserProfile = () => {
           </div>
 
           {/* Divider */}
-          <div className="my-8 border-t border-green-100" />
+          <div className="my-8 border-t border-slate-200 dark:border-zinc-800" />
 
           {/* Info Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
-            <div className="p-4 rounded-xl bg-white border border-green-100 hover:shadow-sm transition">
-              <p className="text-xs text-gray-400 uppercase tracking-wider">
+            <div className="p-4 rounded-2xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 hover:shadow-md transition">
+              <p className="text-xs text-slate-400 uppercase tracking-wider">
                 Full Name
               </p>
-              <p className="mt-1 text-gray-900 font-medium">
+              <p className="mt-1 text-slate-900 dark:text-white font-semibold">
                 {user?.name || '—'}
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-white border border-green-100 hover:shadow-sm transition">
-              <p className="text-xs text-gray-400 uppercase tracking-wider">
+            <div className="p-4 rounded-2xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 hover:shadow-md transition">
+              <p className="text-xs text-slate-400 uppercase tracking-wider">
                 Email
               </p>
-              <p className="mt-1 text-gray-900 font-medium break-all">
+              <p className="mt-1 text-slate-900 dark:text-white font-semibold break-all">
                 {user?.email || '—'}
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-white border border-green-100 hover:shadow-sm transition">
-              <p className="text-xs text-gray-400 uppercase tracking-wider">
+            <div className="p-4 rounded-2xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 hover:shadow-md transition">
+              <p className="text-xs text-slate-400 uppercase tracking-wider">
                 Role
               </p>
-              <p className="mt-1 text-green-600 font-semibold capitalize">
+              <p className="mt-1 text-green-600 dark:text-green-400 font-bold capitalize">
                 {user?.role || 'user'}
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-white border border-green-100 hover:shadow-sm transition">
-              <p className="text-xs text-gray-400 uppercase tracking-wider">
+            <div className="p-4 rounded-2xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 hover:shadow-md transition">
+              <p className="text-xs text-slate-400 uppercase tracking-wider">
                 User ID
               </p>
-              <p className="mt-1 text-xs font-mono text-gray-500 break-all">
+              <p className="mt-1 text-xs font-mono text-slate-500 dark:text-zinc-400 break-all">
                 {user?.id || '—'}
               </p>
             </div>
@@ -120,8 +119,10 @@ const UserProfile = () => {
 
         </div>
       </div>
+
     </div>
-  );
+  </div>
+);
 };
 
 export default UserProfile;

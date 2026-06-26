@@ -24,10 +24,6 @@ const BookedTickets = () => {
   const { data: session, isPending } = useSession();
   const userEmail = session?.user?.email;
   
-    if (!session) {
-      redirect('/auth/login')
-    }
-
   useEffect(() => {
     if (isPending) return;
 
@@ -72,18 +68,40 @@ const BookedTickets = () => {
       </div>
     );
   }
+return (
+  <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-black transition-colors duration-300">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-2">
-        My Booked Tickets
-      </h1>
+      {/* Header */}
+      <div className="mb-10">
+        <span className="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-4 py-1 text-sm font-medium text-green-700 dark:text-green-400">
+          Dashboard
+        </span>
 
-      <p className="text-gray-600 mb-8">
-        Manage all your booked journeys
-      </p>
+        <h1 className="mt-4 text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
+          My Booked Tickets
+        </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <p className="mt-2 text-slate-600 dark:text-zinc-400">
+          View, manage and complete payments for your booked journeys.
+        </p>
+      </div>
+
+      {/* Empty State */}
+      {bookings.length === 0 && (
+        <div className="rounded-3xl border border-dashed border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-16 text-center">
+          <h2 className="text-2xl font-semibold text-slate-700 dark:text-zinc-200">
+            No Bookings Found
+          </h2>
+
+          <p className="mt-3 text-slate-500 dark:text-zinc-400">
+            You haven't booked any tickets yet.
+          </p>
+        </div>
+      )}
+
+      {/* Cards */}
+      <div className="grid gap-7 sm:grid-cols-2 xl:grid-cols-3">
         {bookings.map((ticket) => {
           const totalPrice = Number(ticket.totalPrice) || 0;
 
@@ -96,100 +114,105 @@ const BookedTickets = () => {
 
           const statusClass =
             statusStyle[ticket.status] ||
-            'bg-gray-100 text-gray-600 border border-gray-200';
+            "bg-gray-100 text-gray-700 dark:bg-zinc-800 dark:text-zinc-300";
 
           return (
             <div
               key={ticket._id}
-              className="bg-white rounded-3xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300"
+              className="overflow-hidden rounded-3xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
             >
-              {/* IMAGE */}
+              {/* Image */}
               <div className="relative h-56 overflow-hidden">
                 <img
-                  src={ticket.image || '/placeholder.jpg'}
-                  alt={
-                    ticket.ticketTitle ||
-                    ticket.title ||
-                    'Ticket'
-                  }
-                  className="w-full h-full object-cover"
+                  src={ticket.image || "/placeholder.jpg"}
+                  alt={ticket.ticketTitle || ticket.title}
+                  className="h-full w-full object-cover transition duration-500 hover:scale-110"
                 />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
 
                 <div className="absolute top-4 right-4">
                   <span
-                    className={`text-xs px-4 py-1.5 rounded-full font-semibold ${statusClass}`}
+                    className={`rounded-full px-4 py-1.5 text-xs font-semibold backdrop-blur-md ${statusClass}`}
                   >
-                    {(ticket.status || 'pending').toUpperCase()}
+                    {(ticket.status || "pending").toUpperCase()}
                   </span>
                 </div>
               </div>
 
-              {/* CONTENT */}
-              <div className="p-5 space-y-4">
-                {/* TITLE */}
-                <h2 className="text-lg font-bold line-clamp-2">
+              {/* Content */}
+              <div className="p-6">
+
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white line-clamp-2">
                   {ticket.ticketTitle ||
                     ticket.title ||
-                    'Untitled Ticket'}
+                    "Untitled Ticket"}
                 </h2>
 
-                {/* ROUTE */}
-                <div className="flex items-center gap-2 text-gray-600 text-sm">
-                  <FaMapMarkerAlt className="text-emerald-600" />
+                {/* Route */}
+                <div className="mt-4 flex items-center gap-2 text-slate-600 dark:text-zinc-400">
+                  <FaMapMarkerAlt className="text-green-600" />
                   <span>
-                    {ticket.from || 'N/A'} →{' '}
-                    {ticket.to || 'N/A'}
+                    {ticket.from || "N/A"} →
+                    {" "}
+                    {ticket.to || "N/A"}
                   </span>
                 </div>
 
-                {/* PRICE & QUANTITY */}
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-xs text-gray-500">
+                {/* Info */}
+                <div className="mt-6 grid grid-cols-2 gap-4">
+
+                  <div className="rounded-2xl bg-slate-50 dark:bg-zinc-800 p-4">
+                    <p className="text-xs text-slate-500 dark:text-zinc-500">
                       Quantity
                     </p>
 
-                    <p className="font-semibold">
+                    <h4 className="mt-1 text-lg font-bold text-slate-900 dark:text-white">
                       {ticket.quantity ||
                         ticket.ticketQuantity ||
-                        0}{' '}
-                      Tickets
-                    </p>
+                        0}
+                    </h4>
                   </div>
 
-                  <div className="text-right">
-                    <p className="text-xs text-gray-500">
+                  <div className="rounded-2xl bg-green-50 dark:bg-green-900/20 p-4">
+                    <p className="text-xs text-slate-500 dark:text-zinc-400">
                       Total Price
                     </p>
 
-                    <p className="text-xl font-bold text-emerald-600">
+                    <h4 className="mt-1 text-lg font-bold text-green-600 dark:text-green-400">
                       ৳ {totalPrice}
-                    </p>
+                    </h4>
                   </div>
+
                 </div>
 
-                {/* DEPARTURE */}
-                <div>
-                  <p className="text-xs text-gray-500">
+                {/* Departure */}
+                <div className="mt-6 border-t border-slate-200 dark:border-zinc-800 pt-5">
+
+                  <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-zinc-500">
                     Departure
                   </p>
 
-                  <p className="text-sm font-medium">
+                  <p className="mt-1 font-medium text-slate-700 dark:text-zinc-300">
                     {departureDate
-                      ? departureDate.toLocaleString('en-US', {
-                        dateStyle: 'medium',
-                        timeStyle: 'short',
-                      })
-                      : 'N/A'}
+                      ? departureDate.toLocaleString("en-US", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })
+                      : "N/A"}
                   </p>
+
                 </div>
 
-                {/* COUNTDOWN */}
+                {/* Countdown */}
                 {departureDate && !isPast && (
-                  <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
-                    <div className="flex items-center gap-2 mb-2 text-gray-600 text-sm">
+                  <div className="mt-5 rounded-2xl border border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-900/20 p-4">
+
+                    <div className="mb-2 flex items-center gap-2 text-blue-700 dark:text-blue-300">
                       <FaClock />
-                      <span>Countdown</span>
+                      <span className="text-sm font-medium">
+                        Departure Countdown
+                      </span>
                     </div>
 
                     <Countdown
@@ -202,49 +225,65 @@ const BookedTickets = () => {
                         completed,
                       }) =>
                         completed ? (
-                          <span className="text-red-500 font-semibold">
-                            Departed
+                          <span className="font-semibold text-red-500">
+                            Journey Departed
                           </span>
                         ) : (
-                          <span className="text-blue-600 font-bold text-lg">
-                            {days}d {hours}h {minutes}m{' '}
-                            {seconds}s
+                          <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                            {days}d {hours}h {minutes}m {seconds}s
                           </span>
                         )
                       }
                     />
+
                   </div>
                 )}
 
-                {/* ACTIONS */}
-                {ticket.status === 'accepted' && (
-                  <form action="/api/checkout_sessions" method="POST">
-                    <section>
-                      <button type="submit" role="link" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-2xl font-semibold transition">
-                        Pay Now - ৳ {totalPrice}
+                {/* Actions */}
+                <div className="mt-6">
+
+                  {ticket.status === "accepted" && (
+                    <form
+                      action="/api/checkout_sessions"
+                      method="POST"
+                    >
+                      <button
+                        type="submit"
+                        className="w-full rounded-2xl bg-green-600 hover:bg-green-700 py-3 font-semibold text-white shadow-lg shadow-green-600/20 transition"
+                      >
+                        Pay Now • ৳ {totalPrice}
                       </button>
-                    </section>
-                  </form>
-                )}
+                    </form>
+                  )}
 
-                {ticket.status === 'paid' && (
-                  <div className="text-center text-emerald-600 font-semibold py-2">
-                    ✓ Payment Completed Successfully
-                  </div>
-                )}
+                  {ticket.status === "paid" && (
+                    <div className="rounded-2xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 py-3 text-center font-semibold text-green-700 dark:text-green-400">
+                      ✓ Payment Completed Successfully
+                    </div>
+                  )}
 
-                {ticket.status === 'rejected' && (
-                  <div className="text-center text-rose-600 font-semibold py-2">
-                    Booking Rejected
-                  </div>
-                )}
+                  {ticket.status === "rejected" && (
+                    <div className="rounded-2xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 py-3 text-center font-semibold text-red-600 dark:text-red-400">
+                      Booking Rejected
+                    </div>
+                  )}
+
+                  {ticket.status === "pending" && (
+                    <div className="rounded-2xl border border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20 py-3 text-center font-semibold text-yellow-700 dark:text-yellow-400">
+                      Waiting for Vendor Approval
+                    </div>
+                  )}
+
+                </div>
+
               </div>
             </div>
           );
         })}
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default BookedTickets;
