@@ -74,7 +74,7 @@ const TicketDetailsPage = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
 
-      <div className="bg-white rounded-2xl shadow overflow-hidden">
+      <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl shadow-lg overflow-hidden transition-colors duration-300">
 
         <img
           src={ticket.image}
@@ -84,48 +84,78 @@ const TicketDetailsPage = () => {
 
         <div className="p-6">
 
-          <h1 className="text-3xl font-bold mb-4">
+          <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
             {ticket.title}
           </h1>
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4 text-gray-700 dark:text-gray-300">
 
             <p>
-              <strong>From:</strong> {ticket.from}
+              <strong className="text-gray-900 dark:text-white">
+                From:
+              </strong>{" "}
+              {ticket.from}
             </p>
 
             <p>
-              <strong>To:</strong> {ticket.to}
+              <strong className="text-gray-900 dark:text-white">
+                To:
+              </strong>{" "}
+              {ticket.to}
             </p>
 
             <p>
-              <strong>Transport:</strong> {ticket.type}
+              <strong className="text-gray-900 dark:text-white">
+                Transport:
+              </strong>{" "}
+              {ticket.type}
             </p>
 
             <p>
-              <strong>Price:</strong> ৳{ticket.price}
+              <strong className="text-gray-900 dark:text-white">
+                Price:
+              </strong>{" "}
+              <span className="text-green-600 dark:text-green-400 font-semibold">
+                ৳{ticket.price}
+              </span>
             </p>
 
             <p>
-              <strong>Available Seats:</strong>{' '}
+              <strong className="text-gray-900 dark:text-white">
+                Available Seats:
+              </strong>{" "}
               {ticket.quantity}
             </p>
 
             <p>
-              <strong>Status:</strong>{' '}
-              {ticket.status}
+              <strong className="text-gray-900 dark:text-white">
+                Status:
+              </strong>{" "}
+              <span
+                className={`font-semibold ${ticket.status === "accepted"
+                    ? "text-green-600 dark:text-green-400"
+                    : ticket.status === "pending"
+                      ? "text-yellow-600 dark:text-yellow-400"
+                      : "text-red-600 dark:text-red-400"
+                  }`}
+              >
+                {ticket.status}
+              </span>
             </p>
 
-            <p>
-              <strong>Departure:</strong>{' '}
+            <p className="md:col-span-2">
+              <strong className="text-gray-900 dark:text-white">
+                Departure:
+              </strong>{" "}
               {ticket.dateTime}
             </p>
 
           </div>
 
-          <div className="mt-6">
+          {/* Perks */}
+          <div className="mt-8">
 
-            <h3 className="font-semibold mb-2">
+            <h3 className="font-semibold mb-3 text-gray-900 dark:text-white">
               Perks
             </h3>
 
@@ -133,7 +163,7 @@ const TicketDetailsPage = () => {
               {ticket.perks?.map((perk, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
+                  className="px-3 py-1 rounded-full text-sm bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                 >
                   {perk}
                 </span>
@@ -142,25 +172,29 @@ const TicketDetailsPage = () => {
 
           </div>
 
+          {/* Countdown */}
           <div className="mt-8">
 
-            <h3 className="font-bold text-lg">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white">
               Countdown
             </h3>
 
-            <p className="text-red-600 font-semibold mt-2">
+            <p
+              className={`mt-2 font-semibold ${isExpired
+                  ? "text-red-600 dark:text-red-400"
+                  : "text-orange-600 dark:text-orange-400"
+                }`}
+            >
               {countdown}
             </p>
 
           </div>
 
+          {/* Booking Button */}
           <div
-            disabled={
-              isExpired || isSoldOut
-            }
-            className={`mt-8 cursor-pointer w-full rounded-xl flex justify-center ${isExpired || isSoldOut
-              ? 'bg-gray-300 cursor-not-allowed'
-              : 'bg-green-600 hover:bg-green-700 text-white'
+            className={`mt-8 w-full rounded-xl flex justify-center transition ${isExpired || isSoldOut
+                ? "bg-gray-300 dark:bg-zinc-700 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700 text-white"
               }`}
           >
             <BookingTicketModal
