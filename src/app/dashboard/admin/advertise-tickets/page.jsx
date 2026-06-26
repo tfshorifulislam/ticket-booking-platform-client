@@ -1,9 +1,7 @@
 'use client';
 
 import { advertisement } from '@/lib/actions/addTicket';
-import { getAllTickets } from '@/lib/api/ticket';
-import { useSession } from '@/lib/auth-client';
-import { redirect } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
 import React, { useEffect, useState } from 'react';
 import {
   FaToggleOn,
@@ -14,13 +12,6 @@ import {
 import { toast } from 'react-toastify';
 
 const AdvertiseTicketsPage = () => {
-
-   const { data: session } = useSession()
-  
-    if (!session) {
-      redirect('/auth/login')
-    }
-
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
@@ -29,7 +20,18 @@ const AdvertiseTicketsPage = () => {
   const fetchTickets = async () => {
     try {
       setLoading(true);
-      const data = await getAllTickets();
+      //client component get token.
+            const { data: userToken } = await authClient.token()
+            console.log(userToken)
+      
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/tickets`, {
+              headers: {
+                authorization: `Bearer ${userToken?.token}`
+              },
+      
+              cache: 'no-store'
+            });
+            const data = await res.json()
 
       setTickets(Array.isArray(data) ? data : []);
     } catch (error) {

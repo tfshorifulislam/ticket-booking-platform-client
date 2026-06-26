@@ -8,10 +8,12 @@ export const getVendorTickets = async (vendorEmail) => {
 }
 
 //get all tickets 
-export const getAllTickets = async () => {
-    const res = await fetch(`${baseUrl}/api/tickets`);
-    return res.json();
-}
+// export const getAllTickets = async () => {
+//     const res = await fetch(`${baseUrl}/api/tickets`);
+//     return res.json();
+// }
+
+
 //get all tickets advertisment
 export const getAllAdvertismentTickets = async () => {
     const res = await fetch(`${baseUrl}/api/advertise/tickets`);
