@@ -13,6 +13,7 @@ const AddTicketPage = () => {
 
   const { data: session } = useSession();
    
+
   // Form State
   const [form, setForm] = useState({
     title: '',
@@ -115,159 +116,230 @@ const AddTicketPage = () => {
   };
 
   return (
-  <div className="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50 dark:from-slate-950 dark:to-slate-900 pb-16 transition-colors">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 pb-16">
+      <div className="max-w-4xl mx-auto px-4 py-12">
 
-    <div className="max-w-4xl mx-auto px-4 py-12">
-
-      {/* Header */}
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-3 bg-white dark:bg-slate-900 px-6 py-3 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 mb-4">
-          <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center">
-            <Tag className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+        {/* Header */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-3 bg-white px-6 py-3 rounded-2xl shadow-sm mb-4">
+            <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+              <Tag className="w-6 h-6 text-emerald-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900">Add New Ticket</h1>
           </div>
-
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-            Add New Ticket
-          </h1>
+          <p className="text-gray-600 dark:text-white">Fill all details carefully</p>
         </div>
 
-        <p className="text-slate-600 dark:text-slate-400">
-          Fill all details carefully
-        </p>
-      </div>
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-950 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-zinc-700">
 
-      {/* Form */}
-      <form className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+          <div className="p-8 md:p-10 space-y-10">
 
-        <div className="p-6 md:p-10 space-y-12">
+            {/* Journey Details */}
+            <div>
+              <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                <MapPin className="w-6 h-6 text-emerald-600" />
+                Journey Details
+              </h2>
 
-          {/* Section */}
-          <div>
-            <h2 className="text-lg font-semibold flex items-center gap-2 text-slate-900 dark:text-white mb-6">
-              <MapPin className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-              Journey Details
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <TextField className="w-full" isRequired>
-                <Label className="text-sm text-slate-600 dark:text-slate-300 mb-1">
-                  Ticket Title
-                </Label>
-                <Input className="input" />
-              </TextField>
-
-              <TextField className="w-full" isRequired>
-                <Label className="text-sm text-slate-600 dark:text-slate-300 mb-1">
-                  Transport Type
-                </Label>
-                <Input className="input" />
-              </TextField>
-
-              <TextField className="w-full" isRequired>
-                <Label className="text-sm text-slate-600 dark:text-slate-300 mb-1">
-                  From
-                </Label>
-                <Input className="input" />
-              </TextField>
-
-              <TextField className="w-full" isRequired>
-                <Label className="text-sm text-slate-600 dark:text-slate-300 mb-1">
-                  To
-                </Label>
-                <Input className="input" />
-              </TextField>
-            </div>
-          </div>
-
-          {/* Price */}
-          <div>
-            <h2 className="text-lg font-semibold flex items-center gap-2 text-slate-900 dark:text-white mb-6">
-              <Calendar className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-              Price & Schedule
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <TextField isRequired>
-                <Label className="text-sm text-slate-600 dark:text-slate-300 mb-1">
-                  Price
-                </Label>
-                <Input className="input" />
-              </TextField>
-
-              <TextField isRequired>
-                <Label className="text-sm text-slate-600 dark:text-slate-300 mb-1">
-                  Quantity
-                </Label>
-                <Input className="input" />
-              </TextField>
-
-              <TextField className="md:col-span-2" isRequired>
-                <Label className="text-sm text-slate-600 dark:text-slate-300 mb-1">
-                  Departure
-                </Label>
-                <Input className="input" />
-              </TextField>
-            </div>
-          </div>
-
-          {/* Perks */}
-          <div>
-            <h2 className="text-lg font-semibold flex items-center gap-2 text-slate-900 dark:text-white mb-6">
-              <Award className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-              Amenities
-            </h2>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {perksList.map((perk) => (
-                <label
-                  key={perk}
-                  className="flex items-center gap-2 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-emerald-400 transition"
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <TextField
+                  className="w-full"
+                  isRequired
+                  value={form.title}
+                  onChange={(value) => setForm({ ...form, title: value })}
                 >
-                  <input type="checkbox" />
-                  <span className="text-sm text-slate-700 dark:text-slate-200">
-                    {perk}
-                  </span>
-                </label>
-              ))}
+                  <Label className="block text-sm font-medium text-gray-700 mb-2">Ticket Title</Label>
+                  <Input placeholder="Delhi to Mumbai Express" className="input-field" />
+                </TextField>
+
+                <Select
+                  className="w-full"
+                  placeholder="Select Type"
+                  isRequired
+                  selectedKey={form.type || undefined}
+                  onSelectionChange={(key) => setForm({ ...form, type: String(key) })}
+                >
+                  <Label className="block text-sm font-medium text-gray-700 mb-2">Transport Type</Label>
+                  <Select.Trigger className="input-field flex items-center justify-between w-full">
+                    <Select.Value />
+                    <Select.Indicator />
+                  </Select.Trigger>
+                  <Select.Popover>
+                    <ListBox>
+                      <ListBox.Item id="Bus" textValue="Bus">Bus</ListBox.Item>
+                      <ListBox.Item id="Train" textValue="Train">Train</ListBox.Item>
+                      <ListBox.Item id="Flight" textValue="Flight">Flight</ListBox.Item>
+                    </ListBox>
+                  </Select.Popover>
+                </Select>
+
+                <TextField
+                  className="w-full"
+                  isRequired
+                  value={form.from}
+                  onChange={(value) => setForm({ ...form, from: value })}
+                >
+                  <Label className="block text-sm font-medium text-gray-700 mb-2">From (City)</Label>
+                  <Input placeholder="Delhi" className="input-field" />
+                </TextField>
+
+                <TextField
+                  className="w-full"
+                  isRequired
+                  value={form.to}
+                  onChange={(value) => setForm({ ...form, to: value })}
+                >
+                  <Label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">To (City)</Label>
+                  <Input placeholder="Mumbai" className="input-field" />
+                </TextField>
+              </div>
+            </div>
+
+            {/* Price, Quantity & Date */}
+            <div>
+              <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                <Calendar className="w-6 h-6 text-emerald-600" />
+                Price & Schedule
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <TextField
+                  className="w-full"
+                  isRequired
+                  type="number"
+                  value={form.price}
+                  onChange={(value) => setForm({ ...form, price: value })}
+                >
+                  <Label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Price per Ticket (₹)</Label>
+                  <Input placeholder="899" className="input-field" />
+                </TextField>
+
+                <TextField
+                  className="w-full"
+                  isRequired
+                  type="number"
+                  value={form.quantity}
+                  onChange={(value) => setForm({ ...form, quantity: value })}
+                >
+                  <Label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Ticket Quantity</Label>
+                  <Input placeholder="50" className="input-field" />
+                </TextField>
+
+                <TextField
+                  className="md:col-span-2 w-full"
+                  isRequired
+                  type="datetime-local"
+                  value={form.dateTime}
+                  onChange={(value) => setForm({ ...form, dateTime: value })}
+                >
+                  <Label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">Departure Date & Time</Label>
+                  <Input className="input-field" />
+                </TextField>
+              </div>
+            </div>
+
+            {/* Perks Section (Fixed) */}
+            <div>
+              <div className="flex flex-col gap-1 mb-4">
+                <h2 className="text-xl font-semibold flex items-center gap-2">
+                  <Award className="w-6 h-6 text-emerald-600" />
+                  Amenities (Perks)
+                </h2>
+              </div>
+
+              {/* Correct HeroUI Wrapper Component */}
+              <CheckboxGroup
+                value={form.perks}
+                onChange={(value) => setForm({ ...form, perks: value })}
+              >
+                <Label className="text-sm text-gray-500 dark:text-white block mb-4">Choose all that apply</Label>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {perksList.map((perk) => (
+                    <Checkbox key={perk} value={perk} className="perk-label">
+                      <Checkbox.Content>
+                        <Checkbox.Control>
+                          <Checkbox.Indicator />
+                        </Checkbox.Control>
+                        <span className="text-sm font-medium text-gray-700 dark:text-white">{perk}</span>
+                      </Checkbox.Content>
+                    </Checkbox>
+                  ))}
+                </div>
+              </CheckboxGroup>
+            </div>
+
+            {/* Image Upload */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">Ticket Image</label>
+              <div className="border-2 border-dashed border-gray-300 rounded-3xl p-10 text-center hover:border-emerald-400 transition">
+                <Upload className="w-12 h-12 mx-auto text-gray-400 dark:text-white mb-4" />
+                <p className="font-medium">Upload Image</p>
+                <p className="text-sm text-gray-500 dark:text-white/50 mt-1">PNG, JPG or WebP</p>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="mt-6"
+                  onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
+                />
+
+                {form.image && (
+                  <p className="text-emerald-600 text-sm mt-3">✓ {form.image.name}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Vendor Info */}
+            <div>
+              <h2 className="text-sm font-medium text-gray-700 dark:text-white mb-4">Vendor Information</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <TextField className="w-full" isReadOnly value={session?.user?.name || ''}>
+                  <Label className="text-xs text-gray-500">Name</Label>
+                  <Input className="input-field bg-gray-50 dark:bg-zinc-700" />
+                </TextField>
+
+                <TextField className="w-full" isReadOnly value={session?.user?.email || ''}>
+                  <Label className="text-xs text-gray-500 dark:text-white">Email</Label>
+                  <Input className="input-field bg-gray-50 dark:bg-zinc-700" />
+                </TextField>
+              </div>
             </div>
           </div>
 
-          {/* Upload */}
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-              Upload Image
-            </h2>
-
-            <div className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-3xl p-8 text-center">
-              <Upload className="w-10 h-10 mx-auto text-slate-400 mb-3" />
-
-              <p className="text-slate-700 dark:text-slate-200">
-                Upload ticket image
-              </p>
-
-              <p className="text-sm text-slate-500">
-                PNG, JPG, WEBP
-              </p>
-            </div>
+          {/* Submit Button Area */}
+          <div className="bg-gray-50 dark:bg-zinc-950 px-8 py-8 border-t">
+            {message && (
+              <div className={`p-4 rounded-2xl mb-6 text-center font-medium ${message.type === 'success'
+                ? 'bg-green-100 text-green-700'
+                : 'bg-red-100 text-red-700'
+                }`}>
+                {message.text}
+              </div>
+            )}
+            {session?.user?.isFraud ? (
+              <button
+                type="button"
+                disabled
+                className="w-full bg-red-400 cursor-not-allowed text-white font-semibold py-4 rounded-2xl text-lg"
+              >
+                Fraud Vendor - Access Blocked
+              </button>
+            ) : (
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white font-semibold py-4 rounded-2xl text-lg transition"
+              >
+                {isSubmitting ? 'Adding Ticket...' : 'Add Ticket'}
+              </button>
+            )}
           </div>
+        </form>
 
-        </div>
-
-        {/* Footer */}
-        <div className="bg-slate-50 dark:bg-slate-950 px-6 py-6 border-t border-slate-100 dark:border-slate-800">
-          <button
-            type="submit"
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-4 rounded-2xl transition"
-          >
-            Add Ticket
-          </button>
-        </div>
-
-      </form>
-
+      </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default AddTicketPage;

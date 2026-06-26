@@ -108,7 +108,7 @@ const RevenuePage = () => {
   }
 
   return (
-  <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
+  <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 transition-colors">
     <div className="max-w-7xl mx-auto px-4 py-10">
 
       {/* Header */}

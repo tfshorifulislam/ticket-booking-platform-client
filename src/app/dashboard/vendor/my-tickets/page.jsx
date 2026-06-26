@@ -32,7 +32,7 @@ const MyTicketPage = async () => {
   console.log(vendorTicket)
 
  return (
-  <div className="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50 dark:from-slate-950 dark:to-slate-900 pb-12">
+  <div className="min-h-screen bg-white dark:bg-zinc-950 pb-12">
     <div className="max-w-7xl mx-auto px-4 py-10">
 
       {/* Header */}
