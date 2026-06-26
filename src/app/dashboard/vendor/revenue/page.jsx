@@ -2,6 +2,7 @@
 
 import { getRequestBooking } from '@/lib/api/ticket';
 import { authClient, useSession } from '@/lib/auth-client';
+import { redirect } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   LineChart,
