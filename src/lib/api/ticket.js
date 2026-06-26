@@ -42,11 +42,11 @@ export const getUserAddedTicket = async (email) => {
 
 
 //vendor dashboard request booking api
-export const getRequestBooking = async (vendorEmail) => {
-    const res = await fetch(`${baseUrl}/api/request-booking-tickets?vendorEmail=${vendorEmail}`);
-    const data = await res.json();
-    return data;
-}
+// export const getRequestBooking = async (vendorEmail) => {
+//     const res = await fetch(`${baseUrl}/api/request-booking-tickets?vendorEmail=${vendorEmail}`);
+//     const data = await res.json();
+//     return data;
+// }
 
 
 //pending ticket get for accept or reject by admin api

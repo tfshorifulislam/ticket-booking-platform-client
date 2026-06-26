@@ -1,8 +1,7 @@
 'use client';
 
 import { getRequestBooking } from '@/lib/api/ticket';
-import { useSession } from '@/lib/auth-client';
-import { redirect } from 'next/navigation';
+import { authClient, useSession } from '@/lib/auth-client';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   LineChart,
@@ -31,8 +30,24 @@ const RevenuePage = () => {
     const loadBookings = async () => {
       try {
         if (!session?.user?.email) return;
-        const data = await getRequestBooking(session?.user?.email);
-        setBookings(data || []);
+
+        const { data: tokenData } = await authClient.token();
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/request-booking-tickets?vendorEmail=${session.user.email}`,
+          {
+            headers: {
+              Authorization: `Bearer ${tokenData?.token}`,
+            },
+            cache: "no-store",
+          }
+        );
+
+        const data = await res.json();
+
+        console.log(data);
+
+        setBookings(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error(error);
       } finally {
@@ -108,121 +123,121 @@ const RevenuePage = () => {
   }
 
   return (
-  <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 transition-colors">
-    <div className="max-w-7xl mx-auto px-4 py-10">
+    <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 py-10">
 
-      {/* Header */}
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-          Revenue Overview
-        </h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">
-          Track your earnings, sales, and performance in real time
-        </p>
+        {/* Header */}
+        <div className="mb-10">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            Revenue Overview
+          </h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">
+            Track your earnings, sales, and performance in real time
+          </p>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+          <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+            <p className="text-sm text-slate-500">Total Tickets Added</p>
+            <h2 className="text-4xl font-bold text-slate-900 dark:text-white mt-3">
+              {totalTicketsAdded}
+            </h2>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+            <p className="text-sm text-slate-500">Total Tickets Sold</p>
+            <h2 className="text-4xl font-bold text-emerald-600 mt-3">
+              {totalTicketsSold}
+            </h2>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+            <p className="text-sm text-slate-500">Total Revenue</p>
+            <h2 className="text-4xl font-bold text-emerald-500 mt-3">
+              ৳ {totalRevenue.toLocaleString()}
+            </h2>
+          </div>
+
+        </div>
+
+        {/* Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          {/* Bar Chart */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+              Tickets Added vs Sold
+            </h2>
+
+            <ResponsiveContainer width="100%" height={320}>
+              <BarChart data={ticketsComparison}>
+                <XAxis dataKey="name" stroke="#94a3b8" />
+                <YAxis stroke="#94a3b8" />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="added" fill="#64748b" radius={8} />
+                <Bar dataKey="sold" fill="#10b981" radius={8} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Line Chart */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+              Monthly Revenue Trend
+            </h2>
+
+            <ResponsiveContainer width="100%" height={320}>
+              <LineChart data={revenueData}>
+                <XAxis dataKey="month" stroke="#94a3b8" />
+                <YAxis stroke="#94a3b8" />
+                <Tooltip formatter={(v) => [`৳ ${v.toLocaleString()}`, "Revenue"]} />
+                <Line
+                  type="monotone"
+                  dataKey="revenue"
+                  stroke="#10b981"
+                  strokeWidth={3}
+                  dot={{ r: 4 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Pie Chart */}
+          <div className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+              Booking Status Distribution
+            </h2>
+
+            <ResponsiveContainer width="100%" height={350}>
+              <PieChart>
+                <Pie
+                  data={ticketStatusData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={130}
+                  label={({ name, percent }) =>
+                    `${name}: ${(percent * 100).toFixed(1)}%`
+                  }
+                >
+                  {ticketStatusData.map((_, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+
+        </div>
+
       </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-          <p className="text-sm text-slate-500">Total Tickets Added</p>
-          <h2 className="text-4xl font-bold text-slate-900 dark:text-white mt-3">
-            {totalTicketsAdded}
-          </h2>
-        </div>
-
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-          <p className="text-sm text-slate-500">Total Tickets Sold</p>
-          <h2 className="text-4xl font-bold text-emerald-600 mt-3">
-            {totalTicketsSold}
-          </h2>
-        </div>
-
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-          <p className="text-sm text-slate-500">Total Revenue</p>
-          <h2 className="text-4xl font-bold text-emerald-500 mt-3">
-            ৳ {totalRevenue.toLocaleString()}
-          </h2>
-        </div>
-
-      </div>
-
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-        {/* Bar Chart */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-            Tickets Added vs Sold
-          </h2>
-
-          <ResponsiveContainer width="100%" height={320}>
-            <BarChart data={ticketsComparison}>
-              <XAxis dataKey="name" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="added" fill="#64748b" radius={8} />
-              <Bar dataKey="sold" fill="#10b981" radius={8} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Line Chart */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-            Monthly Revenue Trend
-          </h2>
-
-          <ResponsiveContainer width="100%" height={320}>
-            <LineChart data={revenueData}>
-              <XAxis dataKey="month" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip formatter={(v) => [`৳ ${v.toLocaleString()}`, "Revenue"]} />
-              <Line
-                type="monotone"
-                dataKey="revenue"
-                stroke="#10b981"
-                strokeWidth={3}
-                dot={{ r: 4 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Pie Chart */}
-        <div className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-            Booking Status Distribution
-          </h2>
-
-          <ResponsiveContainer width="100%" height={350}>
-            <PieChart>
-              <Pie
-                data={ticketStatusData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={130}
-                label={({ name, percent }) =>
-                  `${name}: ${(percent * 100).toFixed(1)}%`
-                }
-              >
-                {ticketStatusData.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-      </div>
-
     </div>
-  </div>
-);
+  );
 };
 
 export default RevenuePage;
