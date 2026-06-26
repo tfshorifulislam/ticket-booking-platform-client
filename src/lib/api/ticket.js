@@ -19,10 +19,10 @@ export const getAllAdvertismentTickets = async () => {
 }
 
 //ticket details page api
-export const getTicketById = async (_id) => {
-    const res = await fetch(`${baseUrl}/api/tickets/${_id}`);
-    return res.json();
-}
+// export const getTicketById = async (_id) => {
+//     const res = await fetch(`${baseUrl}/api/tickets/${_id}`);
+//     return res.json();
+// }
 
 //get ticket in added my ticket page
 export const getUserAddedTicket = async (email) => {

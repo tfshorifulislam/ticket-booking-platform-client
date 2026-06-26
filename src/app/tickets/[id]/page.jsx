@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import { redirect, useParams } from 'next/navigation';
 import { BookingTicketModal } from '@/component/PublicComponents/BookingTicketModal';
-import { useSession } from '@/lib/auth-client';
-import { getTicketById } from '@/lib/api/ticket';
+import { authClient, useSession } from '@/lib/auth-client';
 
 const TicketDetailsPage = () => {
   const { id } = useParams();
@@ -19,8 +18,20 @@ const TicketDetailsPage = () => {
 
   useEffect(() => {
     const fetchTicket = async () => {
-      const data = await getTicketById(id);
+      //client component get token.
+      const { data: userToken } = await authClient.token()
+      console.log('token',userToken)
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/tickets/${id}`, {
+        headers: {
+          authorization: `Bearer ${userToken?.token}`
+        },
+
+        cache: 'no-store'
+      });
+      const data = await res.json()
       setTicket(data);
+      console.log(data)
     };
 
     if (id) {
@@ -133,10 +144,10 @@ const TicketDetailsPage = () => {
               </strong>{" "}
               <span
                 className={`font-semibold ${ticket.status === "accepted"
-                    ? "text-green-600 dark:text-green-400"
-                    : ticket.status === "pending"
-                      ? "text-yellow-600 dark:text-yellow-400"
-                      : "text-red-600 dark:text-red-400"
+                  ? "text-green-600 dark:text-green-400"
+                  : ticket.status === "pending"
+                    ? "text-yellow-600 dark:text-yellow-400"
+                    : "text-red-600 dark:text-red-400"
                   }`}
               >
                 {ticket.status}
@@ -181,8 +192,8 @@ const TicketDetailsPage = () => {
 
             <p
               className={`mt-2 font-semibold ${isExpired
-                  ? "text-red-600 dark:text-red-400"
-                  : "text-orange-600 dark:text-orange-400"
+                ? "text-red-600 dark:text-red-400"
+                : "text-orange-600 dark:text-orange-400"
                 }`}
             >
               {countdown}
@@ -193,8 +204,8 @@ const TicketDetailsPage = () => {
           {/* Booking Button */}
           <div
             className={`mt-8 w-full rounded-xl flex justify-center transition ${isExpired || isSoldOut
-                ? "bg-gray-300 dark:bg-zinc-700 cursor-not-allowed"
-                : "bg-green-600 hover:bg-green-700 text-white"
+              ? "bg-gray-300 dark:bg-zinc-700 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700 text-white"
               }`}
           >
             <BookingTicketModal
