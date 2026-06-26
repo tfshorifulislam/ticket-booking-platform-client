@@ -95,35 +95,52 @@ const Sidebar = () => {
     const menuItems = menuConfig[role] || [];
 
     return (
-        <>
-            <div className="top-0 left-0 min-h-screen bg-white rounded-b-lg shadow-sm border-r transition-all duration-300 flex flex-col w-16 sm:w-64">
-                <div className="h-16 flex items-center px-4 border-b justify-center sm:justify-start sm:px-6">
-                    <h1 className="text-xl font-bold text-green-600 truncate">
-                        <span><FaBus className="text-2xl text-green-600 block sm:hidden" /></span>
-                        <span className="hidden sm:block">Ticket System</span>
-                    </h1>
-                </div>
-                <nav className="p-2 sm:p-4 space-y-2 flex-1 overflow-y-auto">
-                    {menuItems.map((item) => {
-                        const isActive = pathname === item.href;
-                        return (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                className={`flex items-center gap-4 p-3 rounded-xl justify-center sm:justify-start ${isActive
-                                        ? 'bg-green-600 text-white'
-                                        : 'text-gray-600 hover:bg-green-50 hover:text-green-600'}`}>
-                                <span className="text-xl shrink-0">{item.icon}</span>
-                                <span className="hidden sm:block text-sm font-medium">
-                                    {item.name}
-                                </span>
-                            </Link>
-                        );
-                    })}
-                </nav>
+    <>
+        <div className="top-0 left-0 min-h-screen bg-white dark:bg-zinc-950 border-r border-gray-200 dark:border-zinc-800 rounded-b-lg shadow-sm transition-all duration-300 flex flex-col w-16 sm:w-64">
+
+            {/* Logo */}
+            <div className="h-16 flex items-center px-4 border-b border-gray-200 dark:border-zinc-800 justify-center sm:justify-start sm:px-6">
+                <h1 className="text-xl font-bold text-green-600 dark:text-emerald-400 truncate flex items-center gap-2">
+                    <span className="block sm:hidden">
+                        <FaBus className="text-2xl" />
+                    </span>
+
+                    <span className="hidden sm:block">
+                        Ticket System
+                    </span>
+                </h1>
             </div>
-        </>
-    );
+
+            {/* Menu */}
+            <nav className="p-2 sm:p-4 space-y-2 flex-1 overflow-y-auto">
+                {menuItems.map((item) => {
+                    const isActive = pathname === item.href;
+
+                    return (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className={`flex items-center gap-4 p-3 rounded-xl justify-center sm:justify-start transition-all duration-200
+                                ${
+                                    isActive
+                                        ? 'bg-green-600 dark:bg-emerald-600 text-white shadow-md'
+                                        : 'text-gray-600 dark:text-zinc-300 hover:bg-green-50 dark:hover:bg-zinc-900 hover:text-green-600 dark:hover:text-emerald-400'
+                                }`}
+                        >
+                            <span className="text-xl shrink-0">
+                                {item.icon}
+                            </span>
+
+                            <span className="hidden sm:block text-sm font-medium">
+                                {item.name}
+                            </span>
+                        </Link>
+                    );
+                })}
+            </nav>
+        </div>
+    </>
+);
 };
 
 export default Sidebar;
