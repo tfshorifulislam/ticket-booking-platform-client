@@ -36,14 +36,15 @@ const PopularRoutes = () => {
     ];
 
     return (
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-white dark:bg-zinc-950 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4">
 
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
                         Popular Routes
                     </h2>
-                    <p className="mt-3 text-gray-500">
+
+                    <p className="mt-3 text-gray-500 dark:text-zinc-400">
                         Discover the most booked routes across Bangladesh.
                     </p>
                 </div>
@@ -52,31 +53,31 @@ const PopularRoutes = () => {
                     {routes.map((route, index) => (
                         <div
                             key={index}
-                            className="border rounded-2xl p-6 hover:shadow-lg transition"
+                            className="border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-2xl p-6 hover:shadow-lg dark:hover:shadow-zinc-900/40 hover:border-green-300 dark:hover:border-green-500 transition-all duration-300"
                         >
                             <div className="flex items-center justify-between">
-                                <h3 className="font-semibold text-lg">
+                                <h3 className="font-semibold text-lg text-gray-800 dark:text-white">
                                     {route.from}
                                 </h3>
 
-                                <FaArrowRight className="text-green-600" />
+                                <FaArrowRight className="text-green-600 dark:text-green-400" />
 
-                                <h3 className="font-semibold text-lg">
+                                <h3 className="font-semibold text-lg text-gray-800 dark:text-white">
                                     {route.to}
                                 </h3>
                             </div>
 
                             <div className="mt-5 flex items-center justify-between">
-                                <span className="text-gray-500">
+                                <span className="text-gray-500 dark:text-zinc-400">
                                     Starting From
                                 </span>
 
-                                <span className="font-bold text-green-600">
+                                <span className="font-bold text-green-600 dark:text-green-400">
                                     {route.price}
                                 </span>
                             </div>
 
-                            <button className="mt-5 w-full py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition">
+                            <button className="mt-5 w-full py-2 rounded-xl bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600 transition">
                                 View Tickets
                             </button>
                         </div>
