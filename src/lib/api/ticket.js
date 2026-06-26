@@ -48,17 +48,17 @@ export const getRequestBooking = async (vendorEmail) => {
 
 
 //pending ticket get for accept or reject by admin api
-export const getPendingTicket = async () => {
-    const res = await fetch(`${baseUrl}/api/get-all-tickets`);
-    const data = await res.json();
-    return data;
-}
+// export const getPendingTicket = async () => {
+//     const res = await fetch(`${baseUrl}/api/get-all-tickets`);
+//     const data = await res.json();
+//     return data;
+// }
 
 // Get All Users
-export const allUser = async () => {
-    const res = await fetch(`${baseUrl}/all-user`);
-    return res.json();
-};
+// export const allUser = async () => {
+//     const res = await fetch(`${baseUrl}/all-user`);
+//     return res.json();
+// };
 
 // Make Admin
 export const makeAdmin = async (id) => {
