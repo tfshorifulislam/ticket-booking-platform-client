@@ -23,106 +23,114 @@ const AdminProfile = () => {
     }
 
   return (
-    <div className="max-w-4xl mx-auto">
+  <div className="max-w-4xl mx-auto px-4">
 
-      {/* Card */}
-      <div className="relative overflow-hidden rounded-2xl border border-green-100 bg-white shadow-sm">
+    <div className="relative overflow-hidden rounded-3xl border border-green-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-lg">
 
-        {/* soft green glow background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-white to-emerald-50" />
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-emerald-950/40" />
 
-        <div className="relative p-6 sm:p-10">
+      <div className="relative p-6 sm:p-10">
 
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
 
-            {/* Avatar */}
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border border-green-100 bg-white shadow-sm flex items-center justify-center">
+          {/* Avatar */}
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border border-green-100 dark:border-zinc-700 bg-white dark:bg-zinc-800 shadow-md flex items-center justify-center">
 
-              {user?.image ? (
-                <Image
-                  src={user.image}
-                  alt={user.name}
-                  width={112}
-                  height={112}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <span className="text-2xl font-semibold text-green-600">
-                  {user?.name?.charAt(0)?.toUpperCase() || 'A'}
-                </span>
-              )}
-
-            </div>
-
-            {/* Info */}
-            <div className="text-center sm:text-left">
-
-              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">
-                {user?.name || 'Admin User'}
-              </h1>
-
-              <p className="text-sm text-gray-500 mt-1">
-                {user?.email || 'admin@email.com'}
-              </p>
-
-              {/* Role Badge */}
-              <span className="inline-flex mt-3 px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100 capitalize">
-                {user?.role || 'admin'}
+            {user?.image ? (
+              <Image
+                src={user.image}
+                alt={user.name}
+                width={112}
+                height={112}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-3xl font-bold text-green-600 dark:text-green-400">
+                {user?.name?.charAt(0)?.toUpperCase() || "A"}
               </span>
-
-            </div>
+            )}
 
           </div>
 
-          {/* Divider */}
-          <div className="my-8 border-t border-green-100" />
+          {/* User Info */}
+          <div className="flex-1 text-center sm:text-left">
 
-          {/* Info Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              {user?.name || "Admin User"}
+            </h1>
 
-            <div className="p-4 rounded-xl bg-white border border-green-100 hover:shadow-sm transition">
-              <p className="text-xs text-gray-400 uppercase tracking-wider">
-                Full Name
-              </p>
-              <p className="mt-1 text-gray-900 font-medium">
-                {user?.name || '—'}
-              </p>
-            </div>
+            <p className="text-gray-500 dark:text-gray-400 mt-2 break-all">
+              {user?.email || "admin@email.com"}
+            </p>
 
-            <div className="p-4 rounded-xl bg-white border border-green-100 hover:shadow-sm transition">
-              <p className="text-xs text-gray-400 uppercase tracking-wider">
-                Email Address
-              </p>
-              <p className="mt-1 text-gray-900 font-medium break-all">
-                {user?.email || '—'}
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-white border border-green-100 hover:shadow-sm transition">
-              <p className="text-xs text-gray-400 uppercase tracking-wider">
-                Role
-              </p>
-              <p className="mt-1 text-green-600 font-semibold capitalize">
-                {user?.role || 'admin'}
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-white border border-green-100 hover:shadow-sm transition">
-              <p className="text-xs text-gray-400 uppercase tracking-wider">
-                Admin ID
-              </p>
-              <p className="mt-1 text-xs font-mono text-gray-500 break-all">
-                {user?.id || '—'}
-              </p>
-            </div>
+            <span className="inline-flex mt-4 px-4 py-1.5 rounded-full text-sm font-medium bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/30 dark:border-green-800 dark:text-green-300 capitalize">
+              {user?.role || "admin"}
+            </span>
 
           </div>
 
         </div>
+
+        {/* Divider */}
+        <div className="my-8 border-t border-green-100 dark:border-zinc-700" />
+
+        {/* Info Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+          {/* Full Name */}
+          <div className="rounded-2xl bg-white dark:bg-zinc-800 border border-green-100 dark:border-zinc-700 p-5 hover:shadow-lg transition">
+            <p className="text-xs uppercase tracking-widest text-gray-400 dark:text-gray-500">
+              Full Name
+            </p>
+
+            <p className="mt-2 text-lg font-semibold text-gray-900 dark:text-white">
+              {user?.name || "—"}
+            </p>
+          </div>
+
+          {/* Email */}
+          <div className="rounded-2xl bg-white dark:bg-zinc-800 border border-green-100 dark:border-zinc-700 p-5 hover:shadow-lg transition">
+            <p className="text-xs uppercase tracking-widest text-gray-400 dark:text-gray-500">
+              Email Address
+            </p>
+
+            <p className="mt-2 text-gray-900 dark:text-gray-200 break-all">
+              {user?.email || "—"}
+            </p>
+          </div>
+
+          {/* Role */}
+          <div className="rounded-2xl bg-white dark:bg-zinc-800 border border-green-100 dark:border-zinc-700 p-5 hover:shadow-lg transition">
+            <p className="text-xs uppercase tracking-widest text-gray-400 dark:text-gray-500">
+              Role
+            </p>
+
+            <p className="mt-2 text-lg font-bold text-green-600 dark:text-green-400 capitalize">
+              {user?.role || "admin"}
+            </p>
+          </div>
+
+          {/* Admin ID */}
+          <div className="rounded-2xl bg-white dark:bg-zinc-800 border border-green-100 dark:border-zinc-700 p-5 hover:shadow-lg transition">
+            <p className="text-xs uppercase tracking-widest text-gray-400 dark:text-gray-500">
+              Admin ID
+            </p>
+
+            <p className="mt-2 font-mono text-sm text-gray-600 dark:text-gray-300 break-all">
+              {user?.id || "—"}
+            </p>
+          </div>
+
+        </div>
+
       </div>
+
     </div>
-  );
+
+  </div>
+);
 };
 
 export default AdminProfile;

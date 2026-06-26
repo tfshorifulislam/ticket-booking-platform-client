@@ -113,138 +113,249 @@ const ManageUsers = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Manage Users
-        </h1>
-        <p className="text-gray-500 mt-1">
-          Control user roles and manage vendor safety
-        </p>
-      </div>
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-      <div className="bg-white border border-gray-200 rounded-3xl shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm">
-            <thead className="bg-green-50 border-b border-green-100">
-              <tr>
-                <th className="text-left px-6 py-5">Name</th>
-                <th className="text-left px-6 py-5">Email</th>
-                <th className="text-left px-6 py-5">Role</th>
-                <th className="text-left px-6 py-5">Status</th>
-                <th className="text-center px-6 py-5">Actions</th>
-              </tr>
-            </thead>
+    {/* Header */}
+    <div className="mb-8">
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        Manage Users
+      </h1>
 
-            <tbody className="divide-y divide-gray-100">
-              {users.map((user) => {
-                const isVendor = user.role === 'vendor';
-                const isFraud = user.isFraud;
+      <p className="text-gray-500 dark:text-gray-400 mt-1">
+        Control user roles and manage vendor safety
+      </p>
+    </div>
 
-                return (
-                  <tr
-                    key={user._id}
-                    className={`hover:bg-green-50 transition ${isFraud
-                        ? 'bg-red-50/40 opacity-75'
-                        : ''
+    {/* Desktop Table */}
+    <div className="hidden lg:block bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl shadow-sm overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="min-w-full text-sm">
+          <thead className="bg-green-50 dark:bg-green-900/20 border-b border-green-100 dark:border-zinc-800">
+            <tr>
+              <th className="text-left px-6 py-5 text-gray-700 dark:text-gray-300">
+                Name
+              </th>
+
+              <th className="text-left px-6 py-5 text-gray-700 dark:text-gray-300">
+                Email
+              </th>
+
+              <th className="text-left px-6 py-5 text-gray-700 dark:text-gray-300">
+                Role
+              </th>
+
+              <th className="text-left px-6 py-5 text-gray-700 dark:text-gray-300">
+                Status
+              </th>
+
+              <th className="text-center px-6 py-5 text-gray-700 dark:text-gray-300">
+                Actions
+              </th>
+            </tr>
+          </thead>
+
+          <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
+            {users.map((user) => {
+              const isVendor = user.role === "vendor";
+              const isFraud = user.isFraud;
+
+              return (
+                <tr
+                  key={user._id}
+                  className={`transition hover:bg-green-50 dark:hover:bg-zinc-800 ${
+                    isFraud
+                      ? "bg-red-50/40 dark:bg-red-900/10"
+                      : ""
+                  }`}
+                >
+                  <td className="px-6 py-5 font-medium text-gray-900 dark:text-white">
+                    {user.name}
+                  </td>
+
+                  <td className="px-6 py-5 text-gray-600 dark:text-gray-300">
+                    {user.email}
+                  </td>
+
+                  <td className="px-6 py-5">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${
+                        user.role === "admin"
+                          ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300"
+                          : user.role === "vendor"
+                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
+                          : "bg-gray-100 text-gray-700 dark:bg-zinc-700 dark:text-gray-200"
                       }`}
-                  >
-                    <td className="px-6 py-5 font-medium">
-                      {user.name}
-                    </td>
+                    >
+                      {user.role || "user"}
+                    </span>
+                  </td>
 
-                    <td className="px-6 py-5">
-                      {user.email}
-                    </td>
-
-                    <td className="px-6 py-5">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${user.role === 'admin'
-                            ? 'bg-indigo-100 text-indigo-700'
-                            : user.role === 'vendor'
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-gray-100 text-gray-700'
-                          }`}
-                      >
-                        {user.role || 'user'}
+                  <td className="px-6 py-5">
+                    {isFraud ? (
+                      <span className="px-3 py-1 rounded-full text-xs bg-red-100 text-red-700 border border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800">
+                        Fraud Vendor
                       </span>
-                    </td>
+                    ) : (
+                      <span className="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                        Active
+                      </span>
+                    )}
+                  </td>
 
-                    <td className="px-6 py-5">
-                      {isFraud ? (
-                        <span className="px-3 py-1 rounded-full text-xs bg-red-100 text-red-700 border border-red-200">
-                          Fraud Vendor
-                        </span>
-                      ) : (
-                        <span className="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700">
-                          Active
-                        </span>
+                  <td className="px-6 py-5">
+                    <div className="flex flex-wrap justify-center gap-2">
+
+                      {user.role !== "admin" && (
+                        <button
+                          onClick={() => handleMakeAdmin(user._id)}
+                          className="flex items-center gap-2 px-4 py-2 text-xs rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white transition"
+                        >
+                          <FaUserShield />
+                          Make Admin
+                        </button>
                       )}
-                    </td>
 
-                    <td className="px-6 py-5">
-                      <div className="flex flex-wrap justify-center gap-2">
+                      {user.role !== "vendor" && (
+                        <button
+                          onClick={() => handleMakeVendor(user._id)}
+                          className="flex items-center gap-2 px-4 py-2 text-xs rounded-xl bg-green-600 hover:bg-green-700 text-white transition"
+                        >
+                          <FaUserTie />
+                          Make Vendor
+                        </button>
+                      )}
 
-                        {user.role !== 'admin' && (
-                          <button
-                            onClick={() =>
-                              handleMakeAdmin(user._id)
-                            }
-                            className="flex items-center gap-2 px-4 py-2 text-xs rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white"
-                          >
-                            <FaUserShield />
-                            Make Admin
-                          </button>
-                        )}
+                      {isVendor && !isFraud && (
+                        <button
+                          onClick={() => handleMarkFraud(user._id)}
+                          className="flex items-center gap-2 px-4 py-2 text-xs rounded-xl bg-red-600 hover:bg-red-700 text-white transition"
+                        >
+                          <FaBan />
+                          Mark Fraud
+                        </button>
+                      )}
 
-                        {user.role !== 'vendor' && (
-                          <button
-                            onClick={() =>
-                              handleMakeVendor(user._id)
-                            }
-                            className="flex items-center gap-2 px-4 py-2 text-xs rounded-xl bg-green-600 hover:bg-green-700 text-white"
-                          >
-                            <FaUserTie />
-                            Make Vendor
-                          </button>
-                        )}
+                      {isVendor && isFraud && (
+                        <div className="flex items-center gap-2 px-4 py-2 text-xs rounded-xl bg-red-50 text-red-600 border border-red-200 dark:bg-red-900/20 dark:text-red-300 dark:border-red-800">
+                          <FaCheck />
+                          Fraud Marked
+                        </div>
+                      )}
 
-                        {isVendor && !isFraud && (
-                          <button
-                            onClick={() =>
-                              handleMarkFraud(user._id)
-                            }
-                            className="flex items-center gap-2 px-4 py-2 text-xs rounded-xl bg-red-600 hover:bg-red-700 text-white"
-                          >
-                            <FaBan />
-                            Mark Fraud
-                          </button>
-                        )}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
 
-                        {isVendor && isFraud && (
-                          <div className="flex items-center gap-2 px-4 py-2 text-xs rounded-xl bg-red-50 text-red-600 border border-red-200">
-                            <FaCheck />
-                            Fraud Marked
-                          </div>
-                        )}
-
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-
-          {users.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              No users found
-            </div>
-          )}
-        </div>
+        {users.length === 0 && (
+          <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+            No users found
+          </div>
+        )}
       </div>
     </div>
-  );
+
+    {/* Mobile Card */}
+    <div className="lg:hidden space-y-5">
+      {users.length === 0 && (
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl p-8 text-center border dark:border-zinc-800 text-gray-500 dark:text-gray-400">
+          No users found
+        </div>
+      )}
+
+      {users.map((user) => {
+        const isVendor = user.role === "vendor";
+        const isFraud = user.isFraud;
+
+        return (
+          <div
+            key={user._id}
+            className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-5 shadow-sm"
+          >
+            <h2 className="font-bold text-lg text-gray-900 dark:text-white">
+              {user.name}
+            </h2>
+
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 break-all">
+              {user.email}
+            </p>
+
+            <div className="flex flex-wrap gap-2 mt-4">
+
+              <span
+                className={`px-3 py-1 rounded-full text-xs ${
+                  user.role === "admin"
+                    ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300"
+                    : user.role === "vendor"
+                    ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
+                    : "bg-gray-100 text-gray-700 dark:bg-zinc-700 dark:text-gray-200"
+                }`}
+              >
+                {user.role || "user"}
+              </span>
+
+              {isFraud ? (
+                <span className="px-3 py-1 rounded-full text-xs bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300">
+                  Fraud
+                </span>
+              ) : (
+                <span className="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                  Active
+                </span>
+              )}
+
+            </div>
+
+            <div className="grid gap-2 mt-5">
+
+              {user.role !== "admin" && (
+                <button
+                  onClick={() => handleMakeAdmin(user._id)}
+                  className="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white flex justify-center items-center gap-2"
+                >
+                  <FaUserShield />
+                  Make Admin
+                </button>
+              )}
+
+              {user.role !== "vendor" && (
+                <button
+                  onClick={() => handleMakeVendor(user._id)}
+                  className="w-full py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white flex justify-center items-center gap-2"
+                >
+                  <FaUserTie />
+                  Make Vendor
+                </button>
+              )}
+
+              {isVendor && !isFraud && (
+                <button
+                  onClick={() => handleMarkFraud(user._id)}
+                  className="w-full py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white flex justify-center items-center gap-2"
+                >
+                  <FaBan />
+                  Mark Fraud
+                </button>
+              )}
+
+              {isVendor && isFraud && (
+                <div className="w-full py-2 rounded-xl bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 flex justify-center items-center gap-2">
+                  <FaCheck />
+                  Fraud Marked
+                </div>
+              )}
+
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+  </div>
+);
 };
 
 export default ManageUsers;
