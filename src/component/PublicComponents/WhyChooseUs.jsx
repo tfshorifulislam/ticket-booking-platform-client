@@ -35,15 +35,16 @@ const WhyChooseUs = () => {
     ];
 
     return (
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-gray-50 dark:bg-zinc-950 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4">
 
                 {/* Section Header */}
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
                         Why Choose Us?
                     </h2>
-                    <p className="text-gray-500 mt-3 max-w-2xl mx-auto">
+
+                    <p className="text-gray-500 dark:text-zinc-400 mt-3 max-w-2xl mx-auto">
                         Experience a smarter, faster, and more reliable way to
                         book your travel tickets.
                     </p>
@@ -54,22 +55,23 @@ const WhyChooseUs = () => {
                     {features.map((feature, index) => (
                         <div
                             key={index}
-                            className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition duration-300"
+                            className="bg-white dark:bg-zinc-900 border border-transparent dark:border-zinc-800 rounded-2xl p-6 shadow-sm hover:shadow-lg dark:hover:shadow-zinc-900/40 hover:border-green-200 dark:hover:border-green-500 transition-all duration-300"
                         >
-                            <div className="w-14 h-14 rounded-xl bg-green-100 text-green-600 flex items-center justify-center text-2xl mb-4">
+                            <div className="w-14 h-14 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 flex items-center justify-center text-2xl mb-4">
                                 {feature.icon}
                             </div>
 
-                            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                            <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
                                 {feature.title}
                             </h3>
 
-                            <p className="text-gray-600 text-sm leading-relaxed">
+                            <p className="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed">
                                 {feature.description}
                             </p>
                         </div>
                     ))}
                 </div>
+
             </div>
         </section>
     );
