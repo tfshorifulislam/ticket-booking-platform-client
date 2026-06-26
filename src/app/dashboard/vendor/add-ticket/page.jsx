@@ -12,7 +12,11 @@ import { redirect } from 'next/navigation';
 const AddTicketPage = () => {
 
   const { data: session } = useSession();
-   
+
+  if (session?.user?.role !== "vendor") {
+    redirect("/");
+  }
+
 
   // Form State
   const [form, setForm] = useState({

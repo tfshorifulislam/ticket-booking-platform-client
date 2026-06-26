@@ -1,20 +1,24 @@
 'use client';
 
 import { bookingAccept, bookingReject } from '@/lib/actions/addTicket';
-import { getRequestBooking } from '@/lib/api/ticket';
 import { authClient, useSession } from '@/lib/auth-client';
-import { Check, X, User, Mail, Ticket, CreditCard, Inbox } from 'lucide-react';
+import { User, Mail, Ticket, CreditCard, Inbox } from 'lucide-react';
 import { redirect, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 
 const BookingsPageVendor = () => {
+  const { data: session, isPending } = useSession()
+
+  if (session?.user?.role !== "vendor") {
+    redirect("/");
+  }
+
   const router = useRouter()
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const { data: session, isPending } = useSession()
 
   // ================= FETCH =================
   useEffect(() => {
@@ -23,7 +27,7 @@ const BookingsPageVendor = () => {
         setLoading(true);
         //client component get token.
         const { data: userToken } = await authClient.token()
-        console.log('token', userToken)
+        // console.log('token', userToken)
 
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/request-booking-tickets?vendorEmail=${session?.user?.email}`, {
           headers: {

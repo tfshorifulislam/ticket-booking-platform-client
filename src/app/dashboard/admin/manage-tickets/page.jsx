@@ -1,6 +1,5 @@
 'use client';
 import { updateStatusByAdmin } from '@/lib/actions/addTicket';
-import { getPendingTicket } from '@/lib/api/ticket';
 import { authClient, useSession } from '@/lib/auth-client';
 import { redirect } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -15,11 +14,11 @@ const statusStyle = {
 
 export default function ManageTicket() {
 
-  const { data: session } = useSession()
-
-  if (!session) {
-    redirect('/auth/login')
-  }
+ const {data:session} = useSession()
+   
+   if (session?.user?.role !== "admin") {
+     redirect("/");
+   }
 
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);

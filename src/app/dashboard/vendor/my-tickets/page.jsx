@@ -1,6 +1,7 @@
 import { DeleteTicket } from "@/component/VendorComponents/DeleteTicket";
 import { MyTicketUpdate } from "@/component/VendorComponents/MyTicketUpdate";
 import { auth } from "@/lib/auth";
+import { authClient } from "@/lib/auth-client";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { FaCheckCircle, FaClock, FaTimesCircle } from "react-icons/fa";
@@ -22,18 +23,27 @@ const MyTicketPage = async () => {
     headers: await headers(),
   });
 
+  if (session?.user?.role !== "vendor") {
+    redirect("/");
+  }
+
   const userEmail = session?.user?.email;
 
+  const { data: userToken } = await authClient.token()
+  console.log('token', userToken)
+
   // Fetches tickets for the current vendor
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/get-user-created-tickets?vendorEmail=${userEmail}`,
-    {
-      cache: "no-store",
-    }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/get-user-created-tickets?vendorEmail=${userEmail}`, {
+
+    headers: {
+      authorization: `Bearer ${userToken?.token}`
+    },
+
+    cache: "no-store",
+  }
   );
 
   const vendorTicket = await res.json();
-  console.log(vendorTicket);
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950 pb-12">

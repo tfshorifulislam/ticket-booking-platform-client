@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { redirect, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { BookingTicketModal } from '@/component/PublicComponents/BookingTicketModal';
 import { authClient, useSession } from '@/lib/auth-client';
 
@@ -18,9 +18,8 @@ const TicketDetailsPage = () => {
 
   useEffect(() => {
     const fetchTicket = async () => {
-      //client component get token.
+ 
       const { data: userToken } = await authClient.token()
-      console.log('token',userToken)
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/tickets/${id}`, {
         headers: {
@@ -29,9 +28,10 @@ const TicketDetailsPage = () => {
 
         cache: 'no-store'
       });
+
       const data = await res.json()
       setTicket(data);
-      console.log(data)
+
     };
 
     if (id) {

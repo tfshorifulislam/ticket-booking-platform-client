@@ -27,18 +27,17 @@ export const getAllAdvertismentTickets = async () => {
 // }
 
 //get ticket in added my ticket page
-export const getUserAddedTicket = async (email) => {
-    console.log("SENDING EMAIL:", email);
+// export const getUserAddedTicket = async (email) => {
 
-    const res = await fetch(
-        `${baseUrl}/api/my-booked-tickets?email=${email}`
-    );
+//     const res = await fetch(
+//         `${baseUrl}/api/my-booked-tickets?email=${email}`
+//     );
 
-    const data = await res.json();
-    console.log("API RESPONSE:", data);
-
-    return data;
-};
+//     const data = await res.json();
+//     console.log("API RESPONSE:", data);
+ 
+//     return data;
+// };
 
 
 //vendor dashboard request booking api

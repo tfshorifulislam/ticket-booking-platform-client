@@ -13,9 +13,16 @@ import {
   makeVendor,
   markFraudVendor,
 } from '@/lib/api/ticket';
-import { authClient } from '@/lib/auth-client';
+import { authClient, useSession } from '@/lib/auth-client';
+import { redirect } from 'next/navigation';
 
 const ManageUsers = () => {
+
+  const { data: session } = useSession()
+
+  if (session?.user?.role !== "admin") {
+    redirect("/");
+  }
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +31,7 @@ const ManageUsers = () => {
   const fetchUsers = async () => {
     try {
       const { data: userToken } = await authClient.token()
-      console.log('token', userToken)
+      // console.log('token', userToken)
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/all-user`, {
         headers: {

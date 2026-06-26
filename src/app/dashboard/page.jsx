@@ -8,8 +8,17 @@ import {
   Clock,
   Star,
 } from 'lucide-react';
+import { useSession } from '@/lib/auth-client';
+import Loading from '../loading';
 
 const Dashboard = () => {
+
+  const {data:session , isPending} = useSession()
+
+  if(isPending){
+    return (<Loading/>)
+  }
+
   return (
   <div className="space-y-8 p-6">
 

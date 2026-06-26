@@ -16,7 +16,6 @@ export const createTicket = async (newTicket) => {
 }
 
 
-
 //update ticket api
 export const ticketUpdate = async (updateTicket) => {
     const res = await fetch(`${baseUrl}/api/update-ticket-info`, {

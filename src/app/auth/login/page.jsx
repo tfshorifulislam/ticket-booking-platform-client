@@ -56,7 +56,7 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-emerald-950/30 flex items-center justify-center px-4 py-10 transition-colors duration-300">
 
-      <div className="w-full max-w-md bg-white dark:bg-zinc-900 border border-green-100 dark:border-zinc-800 rounded-3xl shadow-xl p-8">
+      <div className="w-full max-w-md bg-white dark:bg-zinc-900 border border-green-100 dark:border-zinc-800 rounded-3xl shadow-lg p-8">
 
         {/* Header */}
         <div className="text-center mb-8">

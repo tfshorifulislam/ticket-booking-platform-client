@@ -23,6 +23,10 @@ const COLORS = ['#16a34a', '#f59e0b', '#ef4444'];
 const RevenuePage = () => {
   const { data: session } = useSession();
 
+  if (session?.user?.role !== "vendor") {
+    redirect("/");
+  }
+
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +41,7 @@ const RevenuePage = () => {
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/request-booking-tickets?vendorEmail=${session.user.email}`,
           {
             headers: {
-              Authorization: `Bearer ${tokenData?.token}`,
+              authorization: `Bearer ${tokenData?.token}`,
             },
             cache: "no-store",
           }

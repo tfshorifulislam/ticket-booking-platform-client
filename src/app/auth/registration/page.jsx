@@ -50,7 +50,7 @@ const handleLoginWithGoogle = async () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-black flex items-center justify-center px-4 py-10 transition-colors duration-300">
-      <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl shadow-2xl p-8">
+      <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl shadow-lg p-8">
 
         {/* Header */}
         <div className="text-center mb-8">
