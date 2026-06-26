@@ -23,10 +23,7 @@ const COLORS = ['#16a34a', '#f59e0b', '#ef4444'];
 
 const RevenuePage = () => {
   const { data: session } = useSession();
-  
-    if (!session) {
-      redirect('/auth/login')
-    }
+
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -111,68 +108,94 @@ const RevenuePage = () => {
   }
 
   return (
+  <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
     <div className="max-w-7xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-semibold text-gray-900 mb-8">Revenue Overview</h1>
 
-      {/* Stats Cards */}
+      {/* Header */}
+      <div className="mb-10">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+          Revenue Overview
+        </h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">
+          Track your earnings, sales, and performance in real time
+        </p>
+      </div>
+
+      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white border rounded-2xl p-6 shadow-sm">
-          <p className="text-sm text-gray-500">Total Tickets Added</p>
-          <h2 className="text-4xl font-bold text-gray-800 mt-3">{totalTicketsAdded}</h2>
+
+        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <p className="text-sm text-slate-500">Total Tickets Added</p>
+          <h2 className="text-4xl font-bold text-slate-900 dark:text-white mt-3">
+            {totalTicketsAdded}
+          </h2>
         </div>
 
-        <div className="bg-white border rounded-2xl p-6 shadow-sm">
-          <p className="text-sm text-gray-500">Total Tickets Sold</p>
-          <h2 className="text-4xl font-bold text-green-600 mt-3">{totalTicketsSold}</h2>
-        </div>
-
-        <div className="bg-white border rounded-2xl p-6 shadow-sm">
-          <p className="text-sm text-gray-500">Total Revenue</p>
+        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <p className="text-sm text-slate-500">Total Tickets Sold</p>
           <h2 className="text-4xl font-bold text-emerald-600 mt-3">
+            {totalTicketsSold}
+          </h2>
+        </div>
+
+        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <p className="text-sm text-slate-500">Total Revenue</p>
+          <h2 className="text-4xl font-bold text-emerald-500 mt-3">
             ৳ {totalRevenue.toLocaleString()}
           </h2>
         </div>
+
       </div>
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Tickets Added vs Sold */}
-        <div className="bg-white border rounded-2xl p-6 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4">Tickets Added vs Sold</h2>
+
+        {/* Bar Chart */}
+        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+            Tickets Added vs Sold
+          </h2>
+
           <ResponsiveContainer width="100%" height={320}>
             <BarChart data={ticketsComparison}>
-              <XAxis dataKey="name" />
-              <YAxis />
+              <XAxis dataKey="name" stroke="#94a3b8" />
+              <YAxis stroke="#94a3b8" />
               <Tooltip />
               <Legend />
-              <Bar dataKey="added" fill="#64748b" name="Tickets Added" radius={8} />
-              <Bar dataKey="sold" fill="#16a34a" name="Tickets Sold" radius={8} />
+              <Bar dataKey="added" fill="#64748b" radius={8} />
+              <Bar dataKey="sold" fill="#10b981" radius={8} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Monthly Revenue */}
-        <div className="bg-white border rounded-2xl p-6 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4">Monthly Revenue Trend</h2>
+        {/* Line Chart */}
+        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+            Monthly Revenue Trend
+          </h2>
+
           <ResponsiveContainer width="100%" height={320}>
             <LineChart data={revenueData}>
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip formatter={(value) => [`৳ ${value.toLocaleString()}`, 'Revenue']} />
+              <XAxis dataKey="month" stroke="#94a3b8" />
+              <YAxis stroke="#94a3b8" />
+              <Tooltip formatter={(v) => [`৳ ${v.toLocaleString()}`, "Revenue"]} />
               <Line
                 type="monotone"
                 dataKey="revenue"
-                stroke="#16a34a"
-                strokeWidth={4}
-                dot={{ r: 5 }}
+                stroke="#10b981"
+                strokeWidth={3}
+                dot={{ r: 4 }}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Booking Status Pie Chart */}
-        <div className="bg-white border rounded-2xl p-6 shadow-sm lg:col-span-2">
-          <h2 className="text-lg font-semibold mb-4">Booking Status Distribution</h2>
+        {/* Pie Chart */}
+        <div className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+            Booking Status Distribution
+          </h2>
+
           <ResponsiveContainer width="100%" height={350}>
             <PieChart>
               <Pie
@@ -182,19 +205,24 @@ const RevenuePage = () => {
                 cx="50%"
                 cy="50%"
                 outerRadius={130}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
+                label={({ name, percent }) =>
+                  `${name}: ${(percent * 100).toFixed(1)}%`
+                }
               >
-                {ticketStatusData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                {ticketStatusData.map((_, i) => (
+                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip />
             </PieChart>
           </ResponsiveContainer>
         </div>
+
       </div>
+
     </div>
-  );
+  </div>
+);
 };
 
 export default RevenuePage;
