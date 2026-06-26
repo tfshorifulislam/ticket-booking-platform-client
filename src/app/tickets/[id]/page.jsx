@@ -20,6 +20,7 @@ const TicketDetailsPage = () => {
     const fetchTicket = async () => {
  
       const { data: userToken } = await authClient.token()
+      console.log("TOKEN:", userToken);
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/tickets/${id}`, {
         headers: {
@@ -27,7 +28,9 @@ const TicketDetailsPage = () => {
         },
       });
 
+      console.log("STATUS:", res.status);
       const data = await res.json()
+      console.log("DATA:", data);
       setTicket(data);
 
     };
