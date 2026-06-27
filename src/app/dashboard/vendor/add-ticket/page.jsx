@@ -7,16 +7,11 @@ import { Upload, Calendar, MapPin, Users, Tag, Award } from 'lucide-react';
 import { TextField, Input, Label, Select, ListBox, CheckboxGroup, Checkbox } from "@heroui/react";
 import { createTicket } from '@/lib/actions/addTicket';
 import { toast } from 'react-toastify';
-import { redirect } from 'next/navigation';
+
 
 const AddTicketPage = () => {
 
   const { data: session } = useSession();
-
-  if (session?.user?.role !== "vendor") {
-    redirect("/");
-  }
-
 
   // Form State
   const [form, setForm] = useState({

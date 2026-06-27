@@ -11,20 +11,10 @@ export async function proxy(request) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  const pathname = request.nextUrl.pathname;
-  const role = session?.user?.role;
-
-  if (pathname.startsWith("/dashboard/admin") && role !== "admin") {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  if (pathname.startsWith("/dashboard/vendor") && role !== "vendor") {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path+", "/tickets/:path+"],
+  matcher: ["/dashboard/:path+",
+    "/tickets/:path+"],
 };

@@ -61,38 +61,3 @@ export const getAllAdvertismentTickets = async () => {
 //     return res.json();
 // };
 
-// Make Admin
-export const makeAdmin = async (id) => {
-    const res = await fetch(
-        `${baseUrl}/api/users/make-admin/${id}`,
-        {
-            method: 'PATCH',
-        }
-    );
-
-    return res.json();
-};
-
-// Make Vendor
-export const makeVendor = async (id) => {
-    const res = await fetch(
-        `${baseUrl}/api/users/make-vendor/${id}`,
-        {
-            method: 'PATCH',
-        }
-    );
-
-    return res.json();
-};
-
-// Mark Fraud
-export const markFraudVendor = async (id) => {
-    const res = await fetch(
-        `${baseUrl}/api/users/fraud/${id}`,
-        {
-            method: 'PATCH',
-        }
-    );
-
-    return res.json();
-};

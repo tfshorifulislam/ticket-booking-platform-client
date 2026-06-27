@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import {  useParams } from 'next/navigation';
 import { BookingTicketModal } from '@/component/PublicComponents/BookingTicketModal';
 import { authClient, useSession } from '@/lib/auth-client';
 
@@ -16,29 +16,37 @@ const TicketDetailsPage = () => {
   const [ticket, setTicket] = useState(null);
   const [countdown, setCountdown] = useState('');
 
-  useEffect(() => {
-    const fetchTicket = async () => {
- 
-      const { data: userToken } = await authClient.token()
+useEffect(() => {
+  const fetchTicket = async () => {
+    try {
+      const { data } = await authClient.token();
+
+      const userToken = data?.token;
+
       console.log("TOKEN:", userToken);
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/tickets/${id}`, {
-        headers: {
-          authorization: `Bearer ${userToken?.token}`
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/tickets/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
 
       console.log("STATUS:", res.status);
-      const data = await res.json()
-      console.log("DATA:", data);
-      setTicket(data);
 
-    };
+      const ticket = await res.json();
+      console.log(ticket);
 
-    if (id) {
-      fetchTicket();
+      setTicket(ticket);
+    } catch (err) {
+      console.error(err);
     }
-  }, [id]);
+  };
+
+  if (id) fetchTicket();
+}, [id]);
 
   useEffect(() => {
     if (!ticket?.dateTime) return;

@@ -1,8 +1,6 @@
 'use client';
 
-import { getRequestBooking } from '@/lib/api/ticket';
 import { authClient, useSession } from '@/lib/auth-client';
-import { redirect } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   LineChart,
@@ -23,10 +21,6 @@ const COLORS = ['#16a34a', '#f59e0b', '#ef4444'];
 
 const RevenuePage = () => {
   const { data: session } = useSession();
-
-  if (session?.user?.role !== "vendor") {
-    redirect("/");
-  }
 
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);

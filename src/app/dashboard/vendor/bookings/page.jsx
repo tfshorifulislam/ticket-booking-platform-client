@@ -11,9 +11,6 @@ import { toast } from 'react-toastify';
 const BookingsPageVendor = () => {
   const { data: session, isPending } = useSession()
 
-  if (session?.user?.role !== "vendor") {
-    redirect("/");
-  }
 
   const router = useRouter()
   const [bookings, setBookings] = useState([]);

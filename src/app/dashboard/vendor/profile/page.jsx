@@ -8,10 +8,6 @@ import React from 'react';
 const VendorProfile = () => {
   const { data: session, isPending } = useSession();
 
-  if (session?.user?.role !== "vendor") {
-    redirect("/");
-  }
-
   if (isPending) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-10 animate-pulse">

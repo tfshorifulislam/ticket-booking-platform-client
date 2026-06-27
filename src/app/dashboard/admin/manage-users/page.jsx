@@ -8,13 +8,9 @@ import {
   FaCheck,
 } from 'react-icons/fa';
 
-import {
-  makeAdmin,
-  makeVendor,
-  markFraudVendor,
-} from '@/lib/api/ticket';
 import { authClient, useSession } from '@/lib/auth-client';
 import { redirect } from 'next/navigation';
+import { makeAdmin, makeVendor, markFraudVendor } from '@/lib/actions/addTicket';
 
 const ManageUsers = () => {
 
